@@ -3,374 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Kalibrasi Painting 2W</title>
+  <title>Login - NPCS PROD</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-    
-    body {
-      font-family: 'Rajdhani', sans-serif;
-      overflow: hidden;
-    }
-    
-    .font-tech {
-      font-family: 'Orbitron', sans-serif;
-    }
-    
-    .neon-blue {
-      text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
-    }
-    
-    .neon-border {
-      box-shadow: 0 0 10px rgba(0, 212, 255, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.2);
-    }
-    
-    .glass-panel {
-      background: rgba(10, 25, 47, 0.75);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 212, 255, 0.3);
-    }
-    
-    .input-field {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(0, 212, 255, 0.3);
-      transition: all 0.3s ease;
-    }
-    
-    .input-field:focus {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: #00d4ff;
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-      outline: none;
-    }
-    
-    .btn-glow {
-      background: linear-gradient(135deg, #0066cc 0%, #00d4ff 100%);
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-      transition: all 0.3s ease;
-    }
-    
-    .btn-glow:hover {
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 50px rgba(0, 212, 255, 0.5);
-      transform: translateY(-2px);
-    }
-    
-    .light-beam {
-      position: absolute;
-      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
-      height: 2px;
-      animation: beamMove 8s infinite;
-    }
-    
-    @keyframes beamMove {
-      0%, 100% { transform: translateX(-100vw); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateX(100vw); }
-    }
-    
-    .pulse-glow {
-      animation: pulseGlow 3s infinite;
-    }
-    
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
-      50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.6); }
-    }
-    
+    body { font-family: 'Rajdhani', sans-serif; }
+    .font-tech { font-family: 'Orbitron', sans-serif; }
     .bg-pattern {
-      background-image: 
-        radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(0, 102, 204, 0.1) 0%, transparent 50%);
+      background: radial-gradient(circle at 50% 50%, rgba(6,182,212,0.08) 0%, transparent 70%), #0b1221;
     }
+    .input-box {
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(6,182,212,0.25);
+      transition: all 0.2s;
+    }
+    .input-box:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6,182,212,0.15); outline: none; }
+    .btn-primary {
+      background: linear-gradient(90deg, #0891b2, #06b6d4);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { box-shadow: 0 0 16px rgba(6,182,212,0.6); transform: translateY(-1px); }
   </style>
 </head>
-<body class="bg-gray-900 h-screen w-screen relative">
+<body class="bg-pattern min-h-screen flex items-center justify-center p-4">
 
-  <!-- Background dengan overlay -->
-  <div class="absolute inset-0 bg-pattern">
-    <!-- Background image placeholder (ganti dengan gambar workshop/kalibrasi) -->
-    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900"></div>
-    
-    <!-- Grid pattern overlay -->
-    <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(0, 212, 255, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 212, 255, 0.3) 1px, transparent 1px); background-size: 50px 50px;"></div>
-    
-    <!-- Light beams -->
-    <div class="light-beam top-1/4" style="animation-delay: 0s;"></div>
-    <div class="light-beam top-1/2" style="animation-delay: 2s;"></div>
-    <div class="light-beam top-3/4" style="animation-delay: 4s;"></div>
-    
-    <!-- Decorative circles -->
-    <div class="absolute top-20 left-20 w-96 h-96 bg-blue-500 rounded-full filter blur-[128px] opacity-20"></div>
-    <div class="absolute bottom-20 right-20 w-96 h-96 bg-cyan-500 rounded-full filter blur-[128px] opacity-20"></div>
-  </div>
-
-  <!-- Content Container -->
-  <div class="relative z-10 h-full flex items-center justify-center p-4">
-    
-    <!-- Left Side: Branding -->
-    <div class="hidden lg:block absolute left-12 top-1/2 transform -translate-y-1/2 text-white">
-      <div class="mb-8">
-        <h1 class="font-tech text-6xl font-black mb-2 neon-blue tracking-wider">
-          KALIBRASI
-        </h1>
-        <h2 class="font-tech text-4xl font-bold text-cyan-400 tracking-widest">
-          PAINTING 2W
-        </h2>
-      </div>
+  <div class="w-full max-w-[380px]">
+    <!-- Card -->
+    <div class="bg-slate-900/70 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/20 shadow-2xl">
       
-      <div class="space-y-4">
-        <div class="flex items-center space-x-3 text-cyan-300">
-          <i class="fas fa-tools text-2xl"></i>
-          <span class="text-xl font-semibold tracking-wide">Manajemen Alat Kalibrasi</span>
+      <!-- Header -->
+      <div class="text-center mb-5">
+        <div class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg mb-2">
+          <i class="fas fa-shield-alt text-white text-lg"></i>
         </div>
-        <div class="flex items-center space-x-3 text-cyan-300">
-          <i class="fas fa-clipboard-check text-2xl"></i>
-          <span class="text-xl font-semibold tracking-wide">Jadwal Bulanan Otomatis</span>
-        </div>
-        <div class="flex items-center space-x-3 text-cyan-300">
-          <i class="fas fa-certificate text-2xl"></i>
-          <span class="text-xl font-semibold tracking-wide">Sistem Monitoring Real-time</span>
-        </div>
+        <h1 class="font-tech text-xl font-bold text-white tracking-wider">NPCS <span class="text-cyan-400">PROD</span></h1>
+        <p class="text-cyan-400/60 text-xs tracking-widest uppercase mt-0.5">Painting Section 2W</p>
       </div>
-      
-      <div class="mt-12 flex items-center space-x-2 text-sm text-cyan-400/70">
-        <i class="fas fa-shield-alt"></i>
-        <span>Secure Industrial Management System</span>
-      </div>
-    </div>
 
-    <!-- Right Side: Login Form -->
-    <div class="w-full max-w-md">
-      <div class="glass-panel rounded-2xl p-8 pulse-glow">
-        
-        <!-- Header -->
-        <div class="text-center mb-8">
-          <div class="inline-block mb-4">
-            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center mb-3 neon-border">
-              <i class="fas fa-user-shield text-3xl text-white"></i>
-            </div>
-          </div>
-          <h2 class="font-tech text-3xl font-bold text-white mb-1 tracking-wider">
-            NPCS <span class="text-cyan-400">PROD</span>
-          </h2>
-          <p class="text-cyan-300/70 text-sm tracking-widest uppercase">Painting Section 2W</p>
+      <!-- Form -->
+      <form id="loginForm" class="space-y-3.5">
+        <!-- Username -->
+        <div class="relative">
+          <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-cyan-400/70 text-sm"></i>
+          <input type="text" id="username" required class="input-box w-full pl-9 pr-3 py-2 rounded-lg text-white text-sm placeholder-gray-400" placeholder="USERNAME">
         </div>
 
-        <!-- Login Form -->
-        <form id="loginForm" class="space-y-5">
-          
-          <!-- Username -->
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <i class="fas fa-user text-cyan-400"></i>
-            </div>
-            <input 
-              type="text" 
-              id="username" 
-              required
-              class="input-field w-full pl-12 pr-4 py-3 rounded-lg text-white placeholder-gray-400 text-lg font-semibold tracking-wide"
-              placeholder="USERNAME"
-            >
-          </div>
-
-          <!-- Password -->
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <i class="fas fa-lock text-cyan-400"></i>
-            </div>
-            <input 
-              type="password" 
-              id="password" 
-              required
-              class="input-field w-full pl-12 pr-12 py-3 rounded-lg text-white placeholder-gray-400 text-lg font-semibold tracking-wide"
-              placeholder="Password"
-            >
-            <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-cyan-400 hover:text-cyan-300 transition">
-              <i id="eyeIcon" class="fas fa-eye"></i>
-            </button>
-          </div>
-
-          <!-- CAPTCHA Box -->
-          <div class="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 border border-yellow-400/50 rounded-lg p-4 text-center relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-            <div class="font-tech text-3xl font-bold tracking-[0.5em] text-yellow-400 select-none relative z-10" id="captchaCode">
-              TDGJ
-            </div>
-            <button type="button" onclick="generateCaptcha()" class="absolute top-2 right-2 text-yellow-400/70 hover:text-yellow-400 transition">
-              <i class="fas fa-sync-alt"></i>
-            </button>
-          </div>
-
-          <!-- Enter Code -->
-          <div class="relative">
-            <input 
-              type="text" 
-              id="captchaInput" 
-              required
-              class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 text-center text-xl font-bold tracking-[0.3em] uppercase"
-              placeholder="Enter Code"
-              maxlength="4"
-            >
-          </div>
-
-          <!-- Error Message -->
-          <div id="errorMsg" class="hidden bg-red-500/20 border border-red-500/50 rounded-lg px-4 py-3 text-red-300 text-sm text-center">
-            <i class="fas fa-exclamation-triangle mr-2"></i>
-            <span id="errorText">Username atau password salah!</span>
-          </div>
-
-          <!-- Sign In Button -->
-          <button 
-            type="submit" 
-            class="btn-glow w-full py-4 rounded-lg text-white font-tech font-bold text-lg tracking-wider uppercase"
-          >
-            <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+        <!-- Password -->
+        <div class="relative">
+          <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-cyan-400/70 text-sm"></i>
+          <input type="password" id="password" required class="input-box w-full pl-9 pr-9 py-2 rounded-lg text-white text-sm placeholder-gray-400" placeholder="Password">
+          <button type="button" onclick="togglePwd()" class="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-400/60 hover:text-cyan-400 transition">
+            <i id="eye" class="fas fa-eye text-sm"></i>
           </button>
-
-          <!-- Remember & Reset -->
-          <div class="flex items-center justify-between text-sm">
-            <label class="flex items-center space-x-2 cursor-pointer text-cyan-300/70 hover:text-cyan-300 transition">
-              <input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-cyan-400/50 bg-white/5 text-cyan-400 focus:ring-cyan-400">
-              <span>Remember username</span>
-            </label>
-            <button type="button" onclick="resetPassword()" class="text-cyan-400/70 hover:text-cyan-400 transition underline">
-              Password Reset
-            </button>
-          </div>
-        </form>
-
-        <!-- Footer -->
-        <div class="mt-8 pt-6 border-t border-cyan-400/20 text-center">
-          <p class="text-cyan-300/50 text-xs">
-            © 2026 Painting Section 2W • Industrial Calibration System
-          </p>
         </div>
-      </div>
 
-      <!-- Additional Info -->
-      <div class="mt-6 text-center">
-        <p class="text-cyan-400/60 text-sm">
-          <i class="fas fa-info-circle mr-2"></i>
-          Hubungi IT Support untuk akses login
-        </p>
+        <!-- Error -->
+        <div id="err" class="hidden bg-red-500/15 border border-red-500/40 rounded-lg px-3 py-1.5 text-red-300 text-xs text-center">
+          <i class="fas fa-exclamation-circle mr-1"></i><span id="errTxt">Username atau password salah!</span>
+        </div>
+
+        <!-- Button -->
+        <button type="submit" class="btn-primary w-full py-2.5 rounded-lg text-white font-semibold text-sm tracking-wide flex items-center justify-center gap-2">
+          <i class="fas fa-sign-in-alt"></i> SIGN IN
+        </button>
+
+        <!-- Footer Options -->
+        <div class="flex items-center justify-between pt-1">
+          <label class="flex items-center gap-1.5 text-gray-400 text-xs cursor-pointer hover:text-gray-300">
+            <input type="checkbox" id="remember" class="accent-cyan-500 w-3.5 h-3.5 rounded">
+            <span>Remember username</span>
+          </label>
+          <button type="button" onclick="alert('Hubungi IT Support untuk reset password.')" class="text-cyan-400/70 text-xs hover:text-cyan-400 underline decoration-dotted">Password Reset</button>
+        </div>
+      </form>
+
+      <div class="mt-4 pt-3 border-t border-gray-700/50 text-center">
+        <p class="text-gray-500 text-[10px]">© 2026 Painting Section 2W • Secure Access</p>
       </div>
     </div>
   </div>
 
   <script>
-    // CAPTCHA Generator
-    let currentCaptcha = 'TDGJ';
+    const USERS = { admin: 'admin123', teknisi: 'teknisi123', supervisor: 'supervisor123' };
     
-    function generateCaptcha() {
-      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let captcha = '';
-      for (let i = 0; i < 4; i++) {
-        captcha += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      currentCaptcha = captcha;
-      document.getElementById('captchaCode').textContent = captcha;
-      document.getElementById('captchaInput').value = '';
-    }
+    if(sessionStorage.getItem('auth') === '1') window.location.href = 'dashboard.html';
 
-    function togglePassword() {
-      const pwdInput = document.getElementById('password');
-      const eyeIcon = document.getElementById('eyeIcon');
-      if (pwdInput.type === 'password') {
-        pwdInput.type = 'text';
-        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-      } else {
-        pwdInput.type = 'password';
-        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-      }
+    function togglePwd() {
+      const p = document.getElementById('password');
+      const i = document.getElementById('eye');
+      p.type = p.type === 'password' ? 'text' : 'password';
+      i.classList.toggle('fa-eye'); i.classList.toggle('fa-eye-slash');
     }
-
-    function resetPassword() {
-      alert('Silakan hubungi IT Support untuk reset password.\n\nEmail: it.support@company.com\nExt: 1234');
-    }
-
-    // Form Submission
-    const VALID_USERS = {
-      'admin': 'admin123',
-      'teknisi': 'teknisi123',
-      'supervisor': 'supervisor123'
-    };
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      
-      const username = document.getElementById('username').value.toLowerCase();
-      const password = document.getElementById('password').value;
-      const captchaInput = document.getElementById('captchaInput').value.toUpperCase();
-      const errorMsg = document.getElementById('errorMsg');
-      const errorText = document.getElementById('errorText');
+      const u = document.getElementById('username').value.toLowerCase().trim();
+      const p = document.getElementById('password').value;
+      const err = document.getElementById('err');
+      const txt = document.getElementById('errTxt');
 
-      // Validasi CAPTCHA
-      if (captchaInput !== currentCaptcha) {
-        errorText.textContent = 'Kode verifikasi salah!';
-        errorMsg.classList.remove('hidden');
-        generateCaptcha();
-        return;
-      }
-
-      // Validasi User
-      if (VALID_USERS[username] && VALID_USERS[username] === password) {
-        // Simpan session
-        sessionStorage.setItem('isLoggedIn', 'true');
-        sessionStorage.setItem('currentUser', username);
-        sessionStorage.setItem('userRole', username);
+      if(USERS[u] && USERS[u] === p) {
+        sessionStorage.setItem('auth', '1');
+        sessionStorage.setItem('user', u);
+        if(document.getElementById('remember').checked) localStorage.setItem('remUser', u);
+        else localStorage.removeItem('remUser');
         
-        if (document.getElementById('rememberMe').checked) {
-          localStorage.setItem('rememberedUser', username);
-        } else {
-          localStorage.removeItem('rememberedUser');
-        }
-        
-        // Redirect dengan efek
         const btn = this.querySelector('button[type="submit"]');
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Loading...';
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1000);
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Loading...';
+        setTimeout(() => location.href = 'dashboard.html', 600);
       } else {
-        errorText.textContent = 'Username atau password salah!';
-        errorMsg.classList.remove('hidden');
-        generateCaptcha();
-        
-        // Shake effect
-        const form = document.querySelector('.glass-panel');
-        form.classList.add('animate-[shake_0.5s_ease-in-out]');
-        setTimeout(() => form.classList.remove('animate-[shake_0.5s_ease-in-out]'), 500);
+        txt.textContent = 'Username atau password salah!';
+        err.classList.remove('hidden');
+        document.querySelector('.bg-slate-900\\/70').classList.add('animate-[shake_0.3s_ease]');
+        setTimeout(() => document.querySelector('.bg-slate-900\\/70').classList.remove('animate-[shake_0.3s_ease]'), 300);
       }
     });
 
-    // Load remembered user
-    window.addEventListener('load', function() {
-      const remembered = localStorage.getItem('rememberedUser');
-      if (remembered) {
-        document.getElementById('username').value = remembered;
-        document.getElementById('rememberMe').checked = true;
-      }
-    });
-
-    // Cek apakah sudah login
-    if (sessionStorage.getItem('isLoggedIn') === 'true') {
-      window.location.href = 'dashboard.html';
-    }
-
-    // Add shimmer animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes shimmer {
-        100% { transform: translateX(100%); }
-      }
-      @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-10px); }
-        75% { transform: translateX(10px); }
-      }
-    `;
-    document.head.appendChild(style);
+    window.onload = () => {
+      const rem = localStorage.getItem('remUser');
+      if(rem) { document.getElementById('username').value = rem; document.getElementById('remember').checked = true; }
+    };
   </script>
 </body>
 </html>
