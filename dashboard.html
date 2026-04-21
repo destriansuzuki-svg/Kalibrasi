@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Kalibrasi Painting 2W</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <i class="fas fa-tools text-blue-600 text-2xl mr-3"></i>
+          <span class="font-bold text-xl text-gray-800">Kalibrasi Painting 2W</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="text-sm text-gray-600">
+            <i class="fas fa-user-circle mr-2"></i>
+            <span id="currentUser">User</span>
+          </span>
+          <button 
+            onclick="logout()" 
+            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition"
+          >
+            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Welcome Section -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
+      <p class="text-gray-500 mt-1">Sistem Manajemen Jadwal Kalibrasi Alat - Painting Section 2W</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Total Alat</p>
+            <p id="totalAlat" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+          </div>
+          <div class="bg-blue-100 p-3 rounded-full">
+            <i class="fas fa-toolbox text-blue-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Sudah Kalibrasi</p>
+            <p id="sudahKalibrasi" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+          </div>
+          <div class="bg-green-100 p-3 rounded-full">
+            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Jatuh Tempo</p>
+            <p id="jatuhTempo" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+          </div>
+          <div class="bg-yellow-100 p-3 rounded-full">
+            <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Overdue</p>
+            <p id="overdue" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+          </div>
+          <div class="bg-red-100 p-3 rounded-full">
+            <i class="fas fa-times-circle text-red-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons & Search -->
+    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex space-x-3">
+          <button onclick="showAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center">
+            <i class="fas fa-plus mr-2"></i>Tambah Alat
+          </button>
+          <button onclick="exportToExcel()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition flex items-center">
+            <i class="fas fa-file-excel mr-2"></i>Export Excel
+          </button>
+        </div>
+        <div class="relative w-full md:w-96">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Cari alat, nomor kontrol, atau lokasi..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onkeyup="searchData()"
+          >
+          <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b-2 border-gray-200">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Alat</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No. Seri</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No. Control</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kemampuan</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Merk</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tahun</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Lokasi</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Periode</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tgl Kalibrasi</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="dataTable" class="divide-y divide-gray-200">
+            <!-- Data will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+      <div id="loading" class="p-8 text-center text-gray-500">
+        <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+        <p>Memuat data...</p>
+      </div>
+      <div id="noData" class="hidden p-8 text-center text-gray-500">
+        <i class="fas fa-inbox text-4xl mb-2"></i>
+        <p>Tidak ada data</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Tambah/Edit Alat -->
+  <div id="modalAlat" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-xl font-bold text-gray-800" id="modalTitle">Tambah Alat</h2>
+      </div>
+      <form id="formAlat" class="p-6 space-y-4">
+        <input type="hidden" id="editIndex" value="-1">
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Alat *</label>
+            <input type="text" id="namaAlat" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Seri *</label>
+            <input type="text" id="nomorSeri" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Control *</label>
+            <input type="text" id="nomorControl" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kemampuan Pengukuran</label>
+            <input type="text" id="kemampuan" placeholder="e.g., -9.9-50 °C / 20-90%" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Merk</label>
+            <input type="text" id="merk" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Pemakaian</label>
+            <input type="number" id="tahun" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Lokasi Pemakaian</label>
+            <input type="text" id="lokasi" value="PAINTING (Booth L)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Periode Kalibrasi</label>
+            <select id="periode" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+              <option value="1 Bulan">1 Bulan</option>
+              <option value="3 Bulan">3 Bulan</option>
+              <option value="6 Bulan">6 Bulan</option>
+              <option value="1 Tahun" selected>1 Tahun</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Kalibrasi</label>
+          <input type="date" id="tanggalKalibrasi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan</label>
+          <textarea id="keterangan" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ GANTI DENGAN WEB APP URL ANDA
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXX.../exec';
+
+    // Cek autentikasi
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    // Tampilkan user yang login
+    document.getElementById('currentUser').textContent = sessionStorage.getItem('currentUser') || 'User';
+
+    let allData = [];
+
+    // Load data saat halaman dibuka
+    document.addEventListener('DOMContentLoaded', fetchData);
+
+    async function fetchData() {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        allData = data;
+        renderTable(data);
+        updateStats(data);
+        document.getElementById('loading').classList.add('hidden');
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        document.getElementById('loading').innerHTML = '<p class="text-red-500">Gagal memuat data. Periksa koneksi internet.</p>';
+      }
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('dataTable');
+      tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        document.getElementById('noData').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('noData').classList.add('hidden');
+
+      const today = new Date();
+
+      data.forEach((row, index) => {
+        const status = getStatus(row.tanggal_kalibrasi, row.periode_kalibrasi);
+        const statusClass = getStatusClass(status);
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50 transition';
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-sm text-gray-900">${index + 1}</td>
+          <td class="px-4 py-3 text-sm font-medium text-gray-900">${row.nama_alat || '-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${row.nomor_seri || '-'}</td>
+          <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">${row.nomor_control || '-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${row.kemampuan_pengukuran || '-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${row.merk || '-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${row.tahun_pemakaian || '-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${row.lokasi_pemakaian || '-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${row.periode_kalibrasi || '-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${formatDate(row.tanggal_kalibrasi)}</td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusClass}">${status}</span>
+          </td>
+          <td class="px-4 py-3 text-sm">
+            <button onclick="editAlat(${index})" class="text-blue-600 hover:text-blue-800 mr-3" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button onclick="deleteAlat(${index})" class="text-red-600 hover:text-red-800" title="Hapus">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function getStatus(tanggalKalibrasi, periode) {
+      if (!tanggalKalibrasi) return 'Belum Kalibrasi';
+      
+      const tglKalibrasi = new Date(tanggalKalibrasi);
+      const today = new Date();
+      
+      // Hitung tanggal berikutnya berdasarkan periode
+      let tglBerikutnya = new Date(tglKalibrasi);
+      if (periode && periode.includes('Bulan')) {
+        const bulan = parseInt(periode);
+        tglBerikutnya.setMonth(tglBerikutnya.getMonth() + bulan);
+      } else if (periode && periode.includes('Tahun')) {
+        const tahun = parseInt(periode);
+        tglBerikutnya.setFullYear(tglBerikutnya.getFullYear() + tahun);
+      } else {
+        tglBerikutnya.setFullYear(tglBerikutnya.getFullYear() + 1); // Default 1 tahun
+      }
+
+      const diffTime = tglBerikutnya - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays < 0) return 'Overdue';
+      if (diffDays <= 30) return 'Jatuh Tempo';
+      return 'Valid';
+    }
+
+    function getStatusClass(status) {
+      switch(status) {
+        case 'Valid': return 'bg-green-100 text-green-800';
+        case 'Jatuh Tempo': return 'bg-yellow-100 text-yellow-800';
+        case 'Overdue': return 'bg-red-100 text-red-800';
+        default: return 'bg-gray-100 text-gray-800';
+      }
+    }
+
+    function updateStats(data) {
+      const today = new Date();
+      let sudahKalibrasi = 0;
+      let jatuhTempo = 0;
+      let overdue = 0;
+
+      data.forEach(row => {
+        const status = getStatus(row.tanggal_kalibrasi, row.periode_kalibrasi);
+        if (status === 'Valid') sudahKalibrasi++;
+        else if (status === 'Jatuh Tempo') jatuhTempo++;
+        else if (status === 'Overdue') overdue++;
+      });
+
+      document.getElementById('totalAlat').textContent = data.length;
+      document.getElementById('sudahKalibrasi').textContent = sudahKalibrasi;
+      document.getElementById('jatuhTempo').textContent = jatuhTempo;
+      document.getElementById('overdue').textContent = overdue;
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function searchData() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allData.filter(row => {
+        return (
+          (row.nama_alat && row.nama_alat.toLowerCase().includes(query)) ||
+          (row.nomor_control && row.nomor_control.toLowerCase().includes(query)) ||
+          (row.lokasi_pemakaian && row.lokasi_pemakaian.toLowerCase().includes(query))
+        );
+      });
+      renderTable(filtered);
+    }
+
+    function showAddModal() {
+      document.getElementById('modalTitle').textContent = 'Tambah Alat';
+      document.getElementById('formAlat').reset();
+      document.getElementById('editIndex').value = '-1';
+      document.getElementById('modalAlat').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modalAlat').classList.add('hidden');
+    }
+
+    function editAlat(index) {
+      const row = allData[index];
+      document.getElementById('modalTitle').textContent = 'Edit Alat';
+      document.getElementById('editIndex').value = index;
+      document.getElementById('namaAlat').value = row.nama_alat || '';
+      document.getElementById('nomorSeri').value = row.nomor_seri || '';
+      document.getElementById('nomorControl').value = row.nomor_control || '';
+      document.getElementById('kemampuan').value = row.kemampuan_pengukuran || '';
+      document.getElementById('merk').value = row.merk || '';
+      document.getElementById('tahun').value = row.tahun_pemakaian || '';
+      document.getElementById('lokasi').value = row.lokasi_pemakaian || '';
+      document.getElementById('periode').value = row.periode_kalibrasi || '1 Tahun';
+      document.getElementById('tanggalKalibrasi').value = row.tanggal_kalibrasi || '';
+      document.getElementById('keterangan').value = row.keterangan || '';
+      document.getElementById('modalAlat').classList.remove('hidden');
+    }
+
+    function deleteAlat(index) {
+      if (confirm('Apakah Anda yakin ingin menghapus alat ini?')) {
+        // Implementasi delete akan ditambahkan nanti
+        alert('Fitur delete akan segera ditambahkan');
+      }
+    }
+
+    document.getElementById('formAlat').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        nama_alat: document.getElementById('namaAlat').value,
+        nomor_seri: document.getElementById('nomorSeri').value,
+        nomor_control: document.getElementById('nomorControl').value,
+        kemampuan_pengukuran: document.getElementById('kemampuan').value,
+        merk: document.getElementById('merk').value,
+        tahun_pemakaian: document.getElementById('tahun').value,
+        lokasi_pemakaian: document.getElementById('lokasi').value,
+        periode_kalibrasi: document.getElementById('periode').value,
+        tanggal_kalibrasi: document.getElementById('tanggalKalibrasi').value,
+        keterangan: document.getElementById('keterangan').value
+      };
+
+      // Simpan ke Google Sheets (akan diimplementasikan di Apps Script)
+      console.log('Saving data:', formData);
+      alert('Data berhasil disimpan! (Fitur save akan diaktifkan setelah Apps Script selesai)');
+      closeModal();
+      fetchData();
+    });
+
+    function exportToExcel() {
+      alert('Fitur export Excel akan segera ditambahkan');
+    }
+
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = 'index.html';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('modalAlat').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>
