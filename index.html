@@ -3,60 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Kalibrasi Painting 2W</title>
+  <title>Login - Sistem Kalibrasi Alat</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    }
+    
+    .glass-card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .input-focus:focus {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
-  
-  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-    <!-- Logo/Icon -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+    
+    <!-- Left Side: Illustration & Info -->
+    <div class="md:w-1/2 bg-gradient-to-br from-indigo-500 to-purple-600 p-8 flex flex-col justify-center relative overflow-hidden">
+      <!-- Decorative circles -->
+      <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10"></div>
+      <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-8 -mb-8"></div>
+      
+      <!-- SVG Illustration (Custom made for Calibration Theme) -->
+      <div class="relative z-10 mb-6">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-lg">
+          <!-- Background shapes -->
+          <rect x="50" y="50" width="300" height="200" rx="15" fill="#ffffff" opacity="0.1"/>
+          
+          <!-- Technician figure -->
+          <circle cx="120" cy="100" r="25" fill="#fbbf24"/> <!-- head -->
+          <path d="M120 125 L120 200 M100 150 L140 150 M100 200 L100 250 M140 200 L140 250" stroke="#fbbf24" stroke-width="8" stroke-linecap="round"/>
+          
+          <!-- Tablet -->
+          <rect x="180" y="80" width="120" height="160" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+          <rect x="190" y="90" width="100" height="120" rx="5" fill="#f1f5f9"/>
+          <rect x="200" y="100" width="80" height="10" rx="2" fill="#94a3b8"/>
+          <rect x="200" y="120" width="80" height="10" rx="2" fill="#94a3b8"/>
+          <rect x="200" y="140" width="60" height="10" rx="2" fill="#3b82f6"/>
+          <circle cx="240" cy="230" r="8" fill="#cbd5e1"/>
+          
+          <!-- Tools around -->
+          <g transform="translate(50, 220)">
+            <!-- Thermometer -->
+            <rect x="0" y="0" width="8" height="40" rx="4" fill="#ef4444"/>
+            <circle cx="4" cy="45" r="6" fill="#ef4444"/>
+            <rect x="2" y="10" width="4" height="20" fill="#ffffff"/>
+          </g>
+          
+          <g transform="translate(320, 220)">
+            <!-- Pressure Gauge -->
+            <circle cx="15" cy="15" r="15" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+            <line x1="15" y1="15" x2="25" y2="5" stroke="#dc2626" stroke-width="2"/>
+            <text x="15" y="45" font-size="8" fill="#ffffff" text-anchor="middle">PSI</text>
+          </g>
+          
+          <g transform="translate(280, 50)">
+            <!-- Spray Gun -->
+            <path d="M0 0 L20 0 L20 10 L10 10 L10 20 L0 20 Z" fill="#64748b"/>
+            <rect x="5" y="20" width="10" height="15" fill="#475569"/>
+          </g>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-800">Kalibrasi Painting 2W</h1>
-      <p class="text-gray-500 text-sm mt-2">Sistem Manajemen Kalibrasi Alat</p>
+
+      <h1 class="text-2xl md:text-3xl font-bold text-white mb-2 relative z-10">
+        Sistem Kalibrasi Alat
+      </h1>
+      <p class="text-indigo-100 text-sm md:text-base relative z-10">
+        Painting Section 2W • Manajemen Jadwal & Status Kalibrasi Bulanan
+      </p>
+      
+      <!-- Small badge -->
+      <div class="mt-6 inline-flex items-center px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium relative z-10">
+        <i class="fas fa-shield-alt mr-2"></i> Secure Access Only
+      </div>
     </div>
 
-    <!-- Login Form -->
-    <form id="loginForm" class="space-y-6">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-        <input 
-          type="text" 
-          id="username" 
-          required
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-          placeholder="Masukkan username"
-        >
+    <!-- Right Side: Login Form -->
+    <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center glass-card">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Selamat Datang</h2>
+        <p class="text-gray-500 text-sm">Silakan masuk untuk mengakses dashboard kalibrasi.</p>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-        <input 
-          type="password" 
-          id="password" 
-          required
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-          placeholder="Masukkan password"
+      <form id="loginForm" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+              <i class="fas fa-user"></i>
+            </span>
+            <input 
+              type="text" 
+              id="username" 
+              required
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus transition"
+              placeholder="Masukkan username"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+              <i class="fas fa-lock"></i>
+            </span>
+            <input 
+              type="password" 
+              id="password" 
+              required
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus transition"
+              placeholder="Masukkan password"
+            >
+            <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+              <i id="eyeIcon" class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm flex items-center">
+          <i class="fas fa-exclamation-circle mr-2"></i>
+          <span>Username atau password salah!</span>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
         >
+          <i class="fas fa-sign-in-alt mr-2"></i> Masuk Dashboard
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p class="text-xs text-gray-400">
+          © 2026 Painting Section 2W • v1.0<br>
+          <span class="italic">Dikelola oleh Tim Teknik & Quality Control</span>
+        </p>
       </div>
-
-      <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm"></div>
-
-      <button 
-        type="submit" 
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-lg"
-      >
-        Masuk Dashboard
-      </button>
-    </form>
-
-    <!-- Footer -->
-    <div class="mt-6 text-center text-xs text-gray-400">
-      <p>© 2026 Painting Section 2W</p>
     </div>
   </div>
 
@@ -66,7 +160,7 @@
       window.location.href = 'dashboard.html';
     }
 
-    // Simple authentication (untuk production, gunakan backend yang lebih secure)
+    // Simple authentication
     const VALID_USERS = {
       'admin': 'admin123',
       'teknisi': 'teknisi123',
@@ -81,24 +175,29 @@
       const errorMsg = document.getElementById('errorMsg');
 
       if (VALID_USERS[username] && VALID_USERS[username] === password) {
-        // Simpan session
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('currentUser', username);
-        sessionStorage.setItem('userRole', username); // admin/teknisi/supervisor
-        
-        // Redirect ke dashboard
+        sessionStorage.setItem('userRole', username);
         window.location.href = 'dashboard.html';
       } else {
-        // Tampilkan error
-        errorMsg.textContent = 'Username atau password salah!';
         errorMsg.classList.remove('hidden');
-        
-        // Animasi shake
         const form = document.querySelector('form');
         form.classList.add('animate-pulse');
         setTimeout(() => form.classList.remove('animate-pulse'), 500);
       }
     });
+
+    function togglePassword() {
+      const pwdInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        pwdInput.type = 'password';
+        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
   </script>
 </body>
 </html>
