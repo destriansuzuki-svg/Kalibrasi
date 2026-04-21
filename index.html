@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Kalibrasi Painting 2W</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
+  
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+    <!-- Logo/Icon -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800">Kalibrasi Painting 2W</h1>
+      <p class="text-gray-500 text-sm mt-2">Sistem Manajemen Kalibrasi Alat</p>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          placeholder="Masukkan username"
+        >
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          placeholder="Masukkan password"
+        >
+      </div>
+
+      <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm"></div>
+
+      <button 
+        type="submit" 
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-lg"
+      >
+        Masuk Dashboard
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <div class="mt-6 text-center text-xs text-gray-400">
+      <p>© 2026 Painting Section 2W</p>
+    </div>
+  </div>
+
+  <script>
+    // Cek apakah sudah login
+    if (sessionStorage.getItem('isLoggedIn') === 'true') {
+      window.location.href = 'dashboard.html';
+    }
+
+    // Simple authentication (untuk production, gunakan backend yang lebih secure)
+    const VALID_USERS = {
+      'admin': 'admin123',
+      'teknisi': 'teknisi123',
+      'supervisor': 'supervisor123'
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+
+      if (VALID_USERS[username] && VALID_USERS[username] === password) {
+        // Simpan session
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('currentUser', username);
+        sessionStorage.setItem('userRole', username); // admin/teknisi/supervisor
+        
+        // Redirect ke dashboard
+        window.location.href = 'dashboard.html';
+      } else {
+        // Tampilkan error
+        errorMsg.textContent = 'Username atau password salah!';
+        errorMsg.classList.remove('hidden');
+        
+        // Animasi shake
+        const form = document.querySelector('form');
+        form.classList.add('animate-pulse');
+        setTimeout(() => form.classList.remove('animate-pulse'), 500);
+      }
+    });
+  </script>
+</body>
+</html>
