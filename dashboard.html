@@ -3,374 +3,498 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Kalibrasi Painting 2W</title>
+  <title>Kalibrasi System - Painting 2W</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   
   <style>
-    /* Global Variables untuk Light/Dark Mode */
-    :root {
-      --bg-primary: #0b1221;
-      --bg-card: rgba(15,23,42,0.85);
-      --border-color: rgba(6,182,212,0.2);
-      --input-bg: rgba(15,23,42,0.9);
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --table-header: #1e293b;
-      --table-row-hover: rgba(30,41,59,0.4);
-    }
-    
-    body.light-mode {
-      --bg-primary: #f0f4f8;
-      --bg-card: rgba(255,255,255,0.95);
-      --border-color: rgba(6,182,212,0.3);
-      --input-bg: #ffffff;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --table-header: #e2e8f0;
-      --table-row-hover: rgba(203,213,225,0.4);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
     
     body {
-      font-family: 'Rajdhani', sans-serif;
-      background: var(--bg-primary);
-      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s ease;
     }
     
-    .font-tech { font-family: 'Orbitron', sans-serif; }
-    
-    .card { 
-      background: var(--bg-card); 
-      border: 1px solid var(--border-color);
-      transition: background 0.3s ease, border 0.3s ease;
+    /* ========== DARK MODE (default) ========== */
+    :root {
+      --bg-page: #1a1f2e;
+      --bg-surface: #252b3d;
+      --bg-card: #2d3448;
+      --bg-input: #1e2436;
+      --border: #3a4055;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: rgba(59,130,246,0.1);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --header-bg: #1e2538;
     }
     
-    .input-box { 
-      background: var(--input-bg); 
-      border: 1px solid rgba(6,182,212,0.25); 
+    body.light-mode {
+      --bg-page: #edf2f7;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-input: #f7fafc;
+      --border: #e2e8f0;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-light: rgba(37,99,235,0.08);
+      --header-bg: #ffffff;
+    }
+    
+    body {
+      background-color: var(--bg-page);
       color: var(--text-primary);
-      transition: all 0.2s; 
     }
     
-    .input-box:focus { 
-      border-color: #06b6d4; 
-      box-shadow: 0 0 0 3px rgba(6,182,212,0.15); 
-      outline: none; 
+    /* Card & Surface */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
     }
     
-    .input-box::placeholder { color: #64748b; }
-    
-    body.light-mode .input-box::placeholder { color: #94a3b8; }
-    
-    .btn-cyan { 
-      background: linear-gradient(90deg, #0891b2, #06b6d4); 
-      transition: all 0.2s; 
+    .surface {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
     }
     
-    .btn-cyan:hover { 
-      box-shadow: 0 0 16px rgba(6,182,212,0.6); 
-      transform: translateY(-1px); 
+    /* Input */
+    .input-field {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-primary);
+      transition: all 0.15s;
+      width: 100%;
     }
     
-    .status-valid { 
-      background: rgba(34,197,94,0.15); 
-      color: #4ade80; 
-      border: 1px solid rgba(34,197,94,0.4); 
+    .input-field:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
     }
     
-    .status-due { 
-      background: rgba(234,179,8,0.15); 
-      color: #facc15; 
-      border: 1px solid rgba(234,179,8,0.4); 
+    .input-field::placeholder {
+      color: var(--text-muted);
     }
     
-    .status-overdue { 
-      background: rgba(239,68,68,0.15); 
-      color: #f87171; 
-      border: 1px solid rgba(239,68,68,0.4); 
-    }
-    
-    .table-wrap { 
-      overflow-x: auto; 
-      scrollbar-width: thin; 
-    }
-    
-    .table-wrap::-webkit-scrollbar { height: 6px; }
-    .table-wrap::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
-    
-    /* Light mode table */
-    body.light-mode .table-wrap::-webkit-scrollbar-track { background: #e2e8f0; }
-    
-    th, td { white-space: nowrap; }
-    
-    .modal-bg { 
-      background: rgba(2,6,23,0.85); 
-      backdrop-filter: blur(4px); 
-    }
-    
-    body.light-mode .modal-bg {
-      background: rgba(255,255,255,0.85);
-    }
-    
-    /* Toggle Switch */
-    .theme-switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-    
-    .theme-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
-    .slider {
-      position: absolute;
+    select.input-field {
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #334155;
-      transition: 0.3s;
-      border-radius: 24px;
     }
     
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.3s;
-      border-radius: 50%;
+    /* Button */
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
     
-    input:checked + .slider {
-      background-color: #06b6d4;
+    .btn-primary:hover {
+      background: var(--accent-hover);
     }
     
-    input:checked + .slider:before {
-      transform: translateX(26px);
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
     
-    /* Icons inside slider */
-    .slider .fa-sun,
-    .slider .fa-moon {
-      position: absolute;
-      top: 4px;
+    .btn-secondary:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-danger:hover {
+      background: rgba(239,68,68,0.1);
+      border-color: var(--danger);
+    }
+    
+    /* Status Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .badge-valid {
+      background: rgba(16,185,129,0.12);
+      color: var(--success);
+      border: 1px solid rgba(16,185,129,0.3);
+    }
+    
+    .badge-due {
+      background: rgba(245,158,11,0.12);
+      color: var(--warning);
+      border: 1px solid rgba(245,158,11,0.3);
+    }
+    
+    .badge-overdue {
+      background: rgba(239,68,68,0.12);
+      color: var(--danger);
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    
+    /* Table */
+    .data-table {
+      width: 100%;
+      font-size: 13px;
+    }
+    
+    .data-table th {
+      text-align: left;
+      padding: 12px 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-surface);
       font-size: 12px;
-      transition: 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
-    .slider .fa-sun {
-      left: 6px;
-      color: #facc15;
+    .data-table td {
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
     }
     
-    .slider .fa-moon {
-      right: 6px;
-      color: #94a3b8;
+    .data-table tr:hover td {
+      background: var(--accent-light);
     }
     
-    input:not(:checked) + .slider .fa-sun { opacity: 0; }
-    input:checked + .slider .fa-moon { opacity: 0; }
+    /* Stat Card */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    
+    .modal-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 560px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    
+    /* Theme Toggle - Classic Switch */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 4px;
+      cursor: pointer;
+    }
+    
+    .theme-option {
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    
+    .theme-option.active {
+      background: var(--accent);
+      color: white;
+    }
+    
+    /* Scrollbar */
+    .table-wrap {
+      overflow-x: auto;
+    }
+    
+    .table-wrap::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    
+    .table-wrap::-webkit-scrollbar-track {
+      background: var(--bg-surface);
+      border-radius: 3px;
+    }
+    
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    
+    /* Utility */
+    .text-accent { color: var(--accent); }
+    .border-accent { border-color: var(--accent); }
+    .hidden { display: none; }
   </style>
 </head>
-<body class="text-gray-200 min-h-screen flex flex-col">
+<body>
 
-  <!-- Navbar -->
-  <nav class="card border-b border-cyan-500/20 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded flex items-center justify-center">
-        <i class="fas fa-tools text-white text-sm"></i>
+  <!-- Header / Navbar -->
+  <div class="surface border-b" style="border-top: 3px solid var(--accent);">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-accent rounded flex items-center justify-center">
+          <i class="fas fa-microscope text-white text-sm"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-sm tracking-wide">KALIBRASI MANAGEMENT SYSTEM</h1>
+          <p class="text-xs text-secondary" style="color: var(--text-secondary);">PT Suzuki Indomobil Motor - Painting 2W</p>
+        </div>
       </div>
-      <div>
-        <h1 class="font-tech text-base font-bold text-white">NPCS <span class="text-cyan-400">PROD</span></h1>
-        <p class="text-[10px] text-cyan-400/60 tracking-widest uppercase">Kalibrasi Painting 2W</p>
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle Classic -->
+        <div class="theme-toggle" id="themeToggleBtn">
+          <span class="theme-option" data-theme="dark">
+            <i class="fas fa-moon"></i> <span class="hidden sm:inline">Dark</span>
+          </span>
+          <span class="theme-option" data-theme="light">
+            <i class="fas fa-sun"></i> <span class="hidden sm:inline">Light</span>
+          </span>
+        </div>
+        <div class="w-px h-6 bg-border" style="background: var(--border);"></div>
+        <div class="flex items-center gap-2">
+          <i class="fas fa-user-circle text-secondary"></i>
+          <span class="text-sm" id="userLabel" style="color: var(--text-secondary);">USER</span>
+        </div>
+        <button onclick="logout()" class="text-sm px-3 py-1.5 rounded border" style="border-color: var(--border); color: var(--text-secondary);">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
       </div>
     </div>
-    <div class="flex items-center gap-3">
-      <!-- Theme Toggle -->
-      <label class="theme-switch">
-        <input type="checkbox" id="themeToggle">
-        <span class="slider">
-          <i class="fas fa-sun"></i>
-          <i class="fas fa-moon"></i>
-        </span>
-      </label>
-      
-      <span class="text-xs text-gray-400 hidden sm:inline"><i class="fas fa-user-circle mr-1"></i> <span id="userLabel">USER</span></span>
-      <button onclick="logout()" class="text-xs bg-red-500/20 hover:bg-red-500/40 text-red-300 px-3 py-1.5 rounded border border-red-500/30 transition">
-        <i class="fas fa-sign-out-alt mr-1"></i> Logout
-      </button>
-    </div>
-  </nav>
+  </div>
 
-  <!-- Main -->
-  <main class="flex-1 p-4 max-w-7xl mx-auto w-full">
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 py-5">
     
-    <!-- Stats -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      <div class="card rounded-lg p-3">
-        <p class="text-xs text-gray-400 mb-1">Total Alat</p>
-        <p id="statTotal" class="text-xl font-bold text-white">0</p>
+    <!-- Statistics Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="stat-card">
+        <div class="stat-label">Total Alat</div>
+        <div class="stat-value" id="statTotal">0</div>
       </div>
-      <div class="card rounded-lg p-3">
-        <p class="text-xs text-gray-400 mb-1">Valid</p>
-        <p id="statValid" class="text-xl font-bold text-green-400">0</p>
+      <div class="stat-card">
+        <div class="stat-label">Valid</div>
+        <div class="stat-value" style="color: var(--success);" id="statValid">0</div>
       </div>
-      <div class="card rounded-lg p-3">
-        <p class="text-xs text-gray-400 mb-1">Jatuh Tempo (≤30 hari)</p>
-        <p id="statDue" class="text-xl font-bold text-yellow-400">0</p>
+      <div class="stat-card">
+        <div class="stat-label">Jatuh Tempo</div>
+        <div class="stat-value" style="color: var(--warning);" id="statDue">0</div>
       </div>
-      <div class="card rounded-lg p-3">
-        <p class="text-xs text-gray-400 mb-1">Overdue</p>
-        <p id="statOverdue" class="text-xl font-bold text-red-400">0</p>
+      <div class="stat-card">
+        <div class="stat-label">Overdue</div>
+        <div class="stat-value" style="color: var(--danger);" id="statOverdue">0</div>
       </div>
     </div>
 
-    <!-- Controls -->
-    <div class="flex flex-col sm:flex-row gap-3 mb-4">
-      <div class="relative flex-1">
-        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
-        <input type="text" id="searchInput" class="input-box w-full pl-8 pr-3 py-2 rounded-lg text-sm placeholder-gray-500" placeholder="Cari nama, no. control, atau lokasi...">
+    <!-- Action Bar -->
+    <div class="flex flex-wrap gap-3 mb-5">
+      <div class="flex-1 min-w-[200px]">
+        <div class="relative">
+          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-xs" style="color: var(--text-muted);"></i>
+          <input type="text" id="searchInput" class="input-field pl-8" placeholder="Cari nama alat, no. control, atau lokasi...">
+        </div>
       </div>
-      <button onclick="openModal()" class="btn-cyan px-4 py-2 rounded-lg text-white text-sm font-semibold flex items-center gap-2">
+      <button onclick="openModal()" class="btn-primary">
         <i class="fas fa-plus"></i> Tambah Alat
       </button>
-      <button onclick="triggerEmail()" class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition">
-        <i class="fas fa-paper-plane"></i> Kirim Notif Email
+      <button onclick="triggerEmail()" class="btn-secondary">
+        <i class="fas fa-envelope"></i> Kirim Notifikasi
       </button>
     </div>
 
-    <!-- Table -->
-    <div class="card rounded-lg table-wrap">
-      <table class="w-full text-sm text-left">
-        <thead class="bg-slate-800/50 text-gray-400 border-b border-cyan-500/20">
+    <!-- Data Table -->
+    <div class="card table-wrap">
+      <table class="data-table">
+        <thead>
           <tr>
-            <th class="px-3 py-2.5 font-medium">No</th>
-            <th class="px-3 py-2.5 font-medium">Nama Alat</th>
-            <th class="px-3 py-2.5 font-medium">No. Seri</th>
-            <th class="px-3 py-2.5 font-medium">No. Control</th>
-            <th class="px-3 py-2.5 font-medium">Kemampuan</th>
-            <th class="px-3 py-2.5 font-medium">Merk</th>
-            <th class="px-3 py-2.5 font-medium">Tahun</th>
-            <th class="px-3 py-2.5 font-medium">Lokasi</th>
-            <th class="px-3 py-2.5 font-medium">Periode</th>
-            <th class="px-3 py-2.5 font-medium">Tgl Kalibrasi</th>
-            <th class="px-3 py-2.5 font-medium">Status</th>
-            <th class="px-3 py-2.5 font-medium text-center">Aksi</th>
+            <th>No</th>
+            <th>Nama Alat</th>
+            <th>No. Seri</th>
+            <th>No. Control</th>
+            <th>Kemampuan</th>
+            <th>Merk</th>
+            <th>Tahun</th>
+            <th>Lokasi</th>
+            <th>Periode</th>
+            <th>Tgl Kalibrasi</th>
+            <th>Status</th>
+            <th style="text-align: center;">Aksi</th>
           </tr>
         </thead>
-        <tbody id="tableBody" class="divide-y divide-slate-700/50">
-          <tr><td colspan="12" class="px-3 py-6 text-center text-gray-500">Memuat data...</td></tr>
+        <tbody id="tableBody">
+          <tr><td colspan="12" style="text-align: center; padding: 40px;">Memuat data...</td></tr>
         </tbody>
       </table>
     </div>
   </main>
 
   <!-- Modal -->
-  <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-bg">
-    <div class="card w-full max-w-lg rounded-xl p-5 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4">
-        <h2 id="modalTitle" class="font-tech text-lg font-bold text-primary">Tambah Alat</h2>
-        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition"><i class="fas fa-times"></i></button>
+  <div id="modal" class="modal-overlay hidden">
+    <div class="modal-container">
+      <div class="p-5">
+        <div class="flex justify-between items-center mb-4">
+          <h2 id="modalTitle" class="text-lg font-semibold" style="color: var(--text-primary);">Tambah Alat</h2>
+          <button onclick="closeModal()" style="color: var(--text-muted);">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="formAlat">
+          <input type="hidden" id="editIndex" value="-1">
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <input type="text" id="f_nama" required class="input-field" placeholder="Nama Alat *">
+            <input type="text" id="f_seri" required class="input-field" placeholder="No. Seri *">
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <input type="text" id="f_control" required class="input-field" placeholder="No. Control *">
+            <input type="text" id="f_kemampuan" class="input-field" placeholder="Kemampuan Pengukuran">
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <input type="text" id="f_merk" class="input-field" placeholder="Merk">
+            <input type="number" id="f_tahun" class="input-field" placeholder="Tahun Pemakaian">
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <input type="text" id="f_lokasi" value="PAINTING (Booth L)" class="input-field" placeholder="Lokasi">
+            <select id="f_periode" class="input-field">
+              <option value="1 Bulan">1 Bulan</option>
+              <option value="3 Bulan">3 Bulan</option>
+              <option value="6 Bulan">6 Bulan</option>
+              <option value="1 Tahun" selected>1 Tahun</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <input type="date" id="f_tgl" class="input-field">
+            <input type="email" id="f_email" class="input-field" placeholder="Email PIC">
+          </div>
+          <textarea id="f_ket" rows="2" class="input-field mb-4" placeholder="Keterangan"></textarea>
+          <div class="flex gap-3">
+            <button type="button" onclick="closeModal()" class="btn-secondary flex-1">Batal</button>
+            <button type="submit" class="btn-primary flex-1">Simpan</button>
+          </div>
+        </form>
       </div>
-      <form id="formAlat" class="space-y-3">
-        <input type="hidden" id="editIndex" value="-1">
-        <div class="grid grid-cols-2 gap-3">
-          <input type="text" id="f_nama" required class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="Nama Alat *">
-          <input type="text" id="f_seri" required class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="No. Seri *">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <input type="text" id="f_control" required class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="No. Control *">
-          <input type="text" id="f_kemampuan" class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="Kemampuan Pengukuran">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <input type="text" id="f_merk" class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="Merk">
-          <input type="number" id="f_tahun" class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="Tahun Pemakaian">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <input type="text" id="f_lokasi" value="PAINTING (Booth L)" class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="Lokasi">
-          <select id="f_periode" class="input-box w-full px-3 py-2 rounded text-sm">
-            <option value="1 Bulan">1 Bulan</option>
-            <option value="3 Bulan">3 Bulan</option>
-            <option value="6 Bulan">6 Bulan</option>
-            <option value="1 Tahun" selected>1 Tahun</option>
-          </select>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <input type="date" id="f_tgl" class="input-box w-full px-3 py-2 rounded text-sm">
-          <input type="email" id="f_email" class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500" placeholder="Email PIC (untuk notif)">
-        </div>
-        <textarea id="f_ket" rows="2" class="input-box w-full px-3 py-2 rounded text-sm placeholder-gray-500 resize-none" placeholder="Keterangan"></textarea>
-        <div class="flex gap-3 pt-2">
-          <button type="button" onclick="closeModal()" class="flex-1 py-2 rounded border border-gray-600 text-gray-300 text-sm hover:bg-slate-800 transition">Batal</button>
-          <button type="submit" class="flex-1 btn-cyan py-2 rounded text-white text-sm font-semibold">Simpan</button>
-        </div>
-      </form>
     </div>
   </div>
 
   <script>
-    // ⚠️ GANTI DENGAN WEB APP URL ANDA
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXX/exec';
+    // ========== KONFIGURASI ==========
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXX/exec'; // GANTI DENGAN URL ANDA
 
-    // DARK MODE FUNCTION
+    // ========== THEME MANAGEMENT ==========
     function initTheme() {
-      const savedTheme = localStorage.getItem('theme') || 'dark';
-      const themeToggle = document.getElementById('themeToggle');
-      
-      if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-        themeToggle.checked = true;
-      } else {
-        document.body.classList.remove('light-mode');
-        themeToggle.checked = false;
-      }
-      
-      // Update text color classes for dynamic elements
-      updateTextColors();
+      const saved = localStorage.getItem('theme') || 'dark';
+      setTheme(saved);
     }
     
-    function toggleTheme() {
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle.checked) {
+    function setTheme(theme) {
+      if (theme === 'light') {
         document.body.classList.add('light-mode');
-        localStorage.setItem('theme', 'light');
       } else {
         document.body.classList.remove('light-mode');
-        localStorage.setItem('theme', 'dark');
       }
-      updateTextColors();
-    }
-    
-    function updateTextColors() {
-      const isLight = document.body.classList.contains('light-mode');
-      const stats = document.querySelectorAll('.card .text-white');
-      stats.forEach(el => {
-        if (isLight) {
-          el.style.color = '#0f172a';
+      localStorage.setItem('theme', theme);
+      
+      // Update active state di toggle
+      document.querySelectorAll('.theme-option').forEach(opt => {
+        if (opt.dataset.theme === theme) {
+          opt.classList.add('active');
         } else {
-          el.style.color = '#ffffff';
+          opt.classList.remove('active');
         }
       });
     }
     
-    // Auth Check
-    if(sessionStorage.getItem('auth') !== '1') window.location.replace('index.html');
-    document.getElementById('userLabel').textContent = (sessionStorage.getItem('user') || 'USER').toUpperCase();
+    function toggleThemeUI(theme) {
+      setTheme(theme);
+    }
+    
+    // Event listener untuk theme toggle
+    document.querySelectorAll('.theme-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        toggleThemeUI(opt.dataset.theme);
+      });
+    });
 
+    // ========== AUTH ==========
+    if(sessionStorage.getItem('auth') !== '1') window.location.replace('index.html');
+    document.getElementById('userLabel').innerHTML = (sessionStorage.getItem('user') || 'USER').toUpperCase();
+
+    // ========== DATA ==========
     let allData = [];
 
-    // Fetch Data
     async function loadData() {
       try {
         const res = await fetch(API_URL);
@@ -379,13 +503,12 @@
         renderTable(allData);
         updateStats(allData);
       } catch(e) {
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="12" class="px-3 py-4 text-center text-red-400">Gagal memuat data. Periksa URL API.</td></tr>`;
+        document.getElementById('tableBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding:40px; color:var(--danger);">Gagal memuat data</td></tr>`;
       }
     }
 
-    // Status Logic
     function calcStatus(tgl, periode) {
-      if(!tgl) return { label: 'Belum Kalibrasi', cls: 'status-overdue' };
+      if(!tgl) return { label: 'Belum Kalibrasi', cls: 'badge-overdue' };
       const t = new Date(tgl), now = new Date();
       let next = new Date(t);
       const p = (periode||'').toLowerCase();
@@ -394,35 +517,37 @@
       else next.setFullYear(next.getFullYear() + 1);
       
       const diff = Math.ceil((next - now) / 86400000);
-      if(diff < 0) return { label: 'Overdue', cls: 'status-overdue' };
-      if(diff <= 30) return { label: 'Jatuh Tempo', cls: 'status-due' };
-      return { label: 'Valid', cls: 'status-valid' };
+      if(diff < 0) return { label: 'Overdue', cls: 'badge-overdue' };
+      if(diff <= 30) return { label: 'Jatuh Tempo', cls: 'badge-due' };
+      return { label: 'Valid', cls: 'badge-valid' };
     }
 
-    // Render Table
     function renderTable(data) {
       const tb = document.getElementById('tableBody');
-      if(!data.length) { tb.innerHTML = `<tr><td colspan="12" class="px-3 py-6 text-center text-gray-500">Tidak ada data</td></tr>`; return; }
+      if(!data.length) {
+        tb.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:40px; color:var(--text-muted);">Tidak ada data</td></tr>`;
+        return;
+      }
       
       tb.innerHTML = data.map((r, i) => {
         const st = calcStatus(r.tanggal_kalibrasi, r.periode_kalibrasi);
-        return `<tr class="hover:bg-slate-800/40 transition">
-          <td class="px-3 py-2.5 text-gray-400">${i+1}</td>
-          <td class="px-3 py-2.5 font-medium text-primary">${r.nama_alat||'-'}</td>
-          <td class="px-3 py-2.5 text-secondary">${r.nomor_seri||'-'}</td>
-          <td class="px-3 py-2.5 font-mono text-cyan-400">${r.nomor_control||'-'}</td>
-          <td class="px-3 py-2.5 text-secondary">${r.kemampuan_pengukuran||'-'}</td>
-          <td class="px-3 py-2.5 text-secondary">${r.merk||'-'}</td>
-          <td class="px-3 py-2.5 text-secondary">${r.tahun_pemakaian||'-'}</td>
-          <td class="px-3 py-2.5 text-secondary">${r.lokasi_pemakaian||'-'}</td>
-          <td class="px-3 py-2.5 text-secondary">${r.periode_kalibrasi||'-'}</td>
-          <td class="px-3 py-2.5 text-secondary">${r.tanggal_kalibrasi ? new Date(r.tanggal_kalibrasi).toLocaleDateString('id-ID') : '-'}</td>
-          <td class="px-3 py-2.5"><span class="px-2 py-0.5 rounded text-xs font-semibold ${st.cls}">${st.label}</span></td>
-          <td class="px-3 py-2.5 text-center">
-            <button onclick="editItem(${r._idx})" class="text-cyan-400 hover:text-cyan-300 mx-1" title="Edit"><i class="fas fa-pen-to-square"></i></button>
-            <button onclick="deleteItem(${r._idx})" class="text-red-400 hover:text-red-300 mx-1" title="Hapus"><i class="fas fa-trash"></i></button>
+        return `<tr>
+          <td>${i+1}</td>
+          <td><span style="font-weight:500;">${r.nama_alat||'-'}</span></td>
+          <td style="color: var(--text-secondary);">${r.nomor_seri||'-'}</td>
+          <td><span style="font-family: monospace; color: var(--accent);">${r.nomor_control||'-'}</span></td>
+          <td style="color: var(--text-secondary);">${r.kemampuan_pengukuran||'-'}</td>
+          <td style="color: var(--text-secondary);">${r.merk||'-'}</td>
+          <td style="color: var(--text-secondary);">${r.tahun_pemakaian||'-'}</td>
+          <td style="color: var(--text-secondary);">${r.lokasi_pemakaian||'-'}</td>
+          <td style="color: var(--text-secondary);">${r.periode_kalibrasi||'-'}</td>
+          <td style="color: var(--text-secondary);">${r.tanggal_kalibrasi ? new Date(r.tanggal_kalibrasi).toLocaleDateString('id-ID') : '-'}</td>
+          <td><span class="badge ${st.cls}">${st.label}</span></td>
+          <td style="text-align:center;">
+            <button onclick="editItem(${r._idx})" style="color: var(--accent); margin:0 4px;"><i class="fas fa-edit"></i></button>
+            <button onclick="deleteItem(${r._idx})" style="color: var(--danger); margin:0 4px;"><i class="fas fa-trash"></i></button>
           </td>
-        </tr>`;
+        八`;
       }).join('');
     }
 
@@ -430,9 +555,8 @@
       let v=0, d=0, o=0;
       data.forEach(r => {
         const s = calcStatus(r.tanggal_kalibrasi, r.periode_kalibrasi);
-        if(s.label==='Valid') v++; 
-        else if(s.label==='Jatuh Tempo') d++; 
-        else if(s.label==='Overdue') o++;
+        if(s.label==='Valid') v++;
+        else if(s.label==='Jatuh Tempo') d++;
         else o++;
       });
       document.getElementById('statTotal').textContent = data.length;
@@ -452,10 +576,10 @@
       renderTable(filtered);
     });
 
-    // Modal & Form
-    window.openModal = function(idx=-1) {
+    // Modal
+    function openModal(idx=-1) {
       document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('modalTitle').textContent = idx===-1 ? 'Tambah Alat' : 'Edit Alat';
+      document.getElementById('modalTitle').innerText = idx===-1 ? 'Tambah Alat' : 'Edit Alat';
       document.getElementById('editIndex').value = idx;
       if(idx===-1) {
         document.getElementById('formAlat').reset();
@@ -476,9 +600,7 @@
       }
     }
     
-    window.closeModal = function() { 
-      document.getElementById('modal').classList.add('hidden'); 
-    }
+    function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
     document.getElementById('formAlat').addEventListener('submit', async e => {
       e.preventDefault();
@@ -500,49 +622,41 @@
       };
 
       const btn = e.target.querySelector('button[type="submit"]');
-      const origText = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
       btn.disabled = true;
 
       try {
         await fetch(API_URL, { method:'POST', body: JSON.stringify(payload) });
         closeModal();
         await loadData();
-      } catch(err) { alert('Gagal menyimpan data'); }
-      finally { btn.innerHTML = origText; btn.disabled = false; }
+      } catch(err) { alert('Gagal menyimpan'); }
+      finally { btn.innerHTML = orig; btn.disabled = false; }
     });
 
-    window.editItem = function(idx) { openModal(idx); }
-    
-    window.deleteItem = async function(idx) {
+    window.editItem = (idx) => openModal(idx);
+    window.deleteItem = async (idx) => {
       if(!confirm('Hapus alat ini?')) return;
       try {
         await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'delete', _index: idx }) });
         await loadData();
-      } catch(e) { alert('Gagal menghapus'); }
-    }
-
-    window.triggerEmail = async function() {
-      if(!confirm('Kirim notifikasi email ke semua PIC yang jatuh tempo/overdue?')) return;
+      } catch(e) { alert('Gagal hapus'); }
+    };
+    window.triggerEmail = async () => {
+      if(!confirm('Kirim notifikasi email ke PIC?')) return;
       try {
         await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'send_notification' }) });
-        alert('✅ Notifikasi email berhasil dikirim!');
-      } catch(e) { alert('❌ Gagal mengirim notifikasi. Cek Apps Script log.'); }
-    }
-
-    window.logout = function() {
+        alert('Notifikasi terkirim');
+      } catch(e) { alert('Gagal kirim'); }
+    };
+    window.logout = () => {
       sessionStorage.clear();
       window.location.replace('index.html');
-    }
+    };
 
-    // Event listener untuk theme toggle
-    document.getElementById('themeToggle').addEventListener('change', toggleTheme);
-    
     // Init
-    window.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      loadData();
-    });
+    initTheme();
+    loadData();
   </script>
 </body>
 </html>
