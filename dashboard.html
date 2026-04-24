@@ -2,513 +2,252 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kalibrasi System - Painting 2W</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Dashboard - Kalibrasi Painting 2W</title>
+  
+  <!-- Google Fonts & CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
   
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Inter', sans-serif;
-      transition: background-color 0.2s ease;
-    }
-    
-    /* ========== DARK MODE (default) ========== */
-    :root {
-      --bg-page: #1a1f2e;
-      --bg-surface: #252b3d;
-      --bg-card: #2d3448;
-      --bg-input: #1e2436;
-      --border: #3a4055;
-      --text-primary: #e2e8f0;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --accent-light: rgba(59,130,246,0.1);
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --header-bg: #1e2538;
-    }
-    
-    body.light-mode {
-      --bg-page: #edf2f7;
-      --bg-surface: #ffffff;
-      --bg-card: #ffffff;
-      --bg-input: #f7fafc;
-      --border: #e2e8f0;
-      --text-primary: #1a202c;
-      --text-secondary: #4a5568;
-      --text-muted: #718096;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --accent-light: rgba(37,99,235,0.08);
-      --header-bg: #ffffff;
-    }
-    
-    body {
-      background-color: var(--bg-page);
-      color: var(--text-primary);
-    }
-    
-    /* Card & Surface */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-    
-    .surface {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-    }
-    
-    /* Input */
-    .input-field {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 13px;
-      color: var(--text-primary);
-      transition: all 0.15s;
-      width: 100%;
-    }
-    
-    .input-field:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-light);
-    }
-    
-    .input-field::placeholder {
-      color: var(--text-muted);
-    }
-    
-    select.input-field {
-      cursor: pointer;
-    }
-    
-    /* Button */
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
-    
-    .btn-secondary {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .btn-secondary:hover {
-      background: var(--accent-light);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    
-    .btn-danger {
-      background: transparent;
-      color: var(--danger);
-      border: 1px solid var(--border);
-    }
-    
-    .btn-danger:hover {
-      background: rgba(239,68,68,0.1);
-      border-color: var(--danger);
-    }
-    
-    /* Status Badges */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    
-    .badge-valid {
-      background: rgba(16,185,129,0.12);
-      color: var(--success);
-      border: 1px solid rgba(16,185,129,0.3);
-    }
-    
-    .badge-due {
-      background: rgba(245,158,11,0.12);
-      color: var(--warning);
-      border: 1px solid rgba(245,158,11,0.3);
-    }
-    
-    .badge-overdue {
-      background: rgba(239,68,68,0.12);
-      color: var(--danger);
-      border: 1px solid rgba(239,68,68,0.3);
-    }
-    
-    /* Table */
-    .data-table {
-      width: 100%;
-      font-size: 13px;
-    }
-    
-    .data-table th {
-      text-align: left;
-      padding: 12px 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border);
-      background: var(--bg-surface);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .data-table td {
-      padding: 12px 12px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-primary);
-    }
-    
-    .data-table tr:hover td {
-      background: var(--accent-light);
-    }
-    
-    /* Stat Card */
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-    }
-    
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-    
-    .stat-value {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-    
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(2px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-    
-    .modal-container {
+    /* Tambahan khusus dashboard */
+    .chart-container {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      width: 90%;
-      max-width: 560px;
-      max-height: 85vh;
-      overflow-y: auto;
+      padding: 16px;
     }
     
-    /* Theme Toggle - Classic Switch */
-    .theme-toggle {
+    .recent-list {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .recent-item {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .recent-item:last-child {
+      border-bottom: none;
+    }
+    
+    .notification-badge {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    
+    .quick-action-btn {
       background: var(--bg-input);
       border: 1px solid var(--border);
-      border-radius: 30px;
-      padding: 4px;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
       cursor: pointer;
-    }
-    
-    .theme-option {
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 12px;
-      font-weight: 500;
       transition: all 0.15s;
     }
     
-    .theme-option.active {
-      background: var(--accent);
-      color: white;
+    .quick-action-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
     }
     
-    /* Scrollbar */
-    .table-wrap {
-      overflow-x: auto;
+    @media (max-width: 768px) {
+      .recent-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
     }
-    
-    .table-wrap::-webkit-scrollbar {
-      height: 6px;
-      width: 6px;
-    }
-    
-    .table-wrap::-webkit-scrollbar-track {
-      background: var(--bg-surface);
-      border-radius: 3px;
-    }
-    
-    .table-wrap::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 3px;
-    }
-    
-    /* Utility */
-    .text-accent { color: var(--accent); }
-    .border-accent { border-color: var(--accent); }
-    .hidden { display: none; }
   </style>
 </head>
 <body>
 
-  <!-- Header / Navbar -->
-  <div class="surface border-b" style="border-top: 3px solid var(--accent);">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-accent rounded flex items-center justify-center">
-          <i class="fas fa-microscope text-white text-sm"></i>
-        </div>
-        <div>
-          <h1 class="font-bold text-sm tracking-wide">KALIBRASI MANAGEMENT SYSTEM</h1>
-          <p class="text-xs text-secondary" style="color: var(--text-secondary);">PT Suzuki Indomobil Motor - Painting 2W</p>
-        </div>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon">
+        <i class="fas fa-microscope text-white"></i>
       </div>
-      <div class="flex items-center gap-3">
-        <!-- Theme Toggle Classic -->
+      <div class="logo-text">KALIBRASI SYSTEM</div>
+    </div>
+    <nav class="nav-menu">
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="alat.html" class="nav-item">
+        <i class="fas fa-tools"></i>
+        <span>Data Alat</span>
+      </a>
+      <a href="outstanding.html" class="nav-item">
+        <i class="fas fa-clock"></i>
+        <span>Outstanding</span>
+      </a>
+      <a href="jadwal.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Jadwal Kalibrasi</span>
+      </a>
+      <a href="log-notif.html" class="nav-item">
+        <i class="fas fa-envelope"></i>
+        <span>Log Notifikasi</span>
+      </a>
+      <a href="pic.html" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span>PIC & Lokasi</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h2 style="font-size: 18px; font-weight: 600;">Dashboard</h2>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
         <div class="theme-toggle" id="themeToggleBtn">
-          <span class="theme-option" data-theme="dark">
-            <i class="fas fa-moon"></i> <span class="hidden sm:inline">Dark</span>
-          </span>
-          <span class="theme-option" data-theme="light">
-            <i class="fas fa-sun"></i> <span class="hidden sm:inline">Light</span>
-          </span>
+          <span class="theme-opt" data-theme="dark"><i class="fas fa-moon"></i></span>
+          <span class="theme-opt" data-theme="light"><i class="fas fa-sun"></i></span>
         </div>
-        <div class="w-px h-6 bg-border" style="background: var(--border);"></div>
-        <div class="flex items-center gap-2">
-          <i class="fas fa-user-circle text-secondary"></i>
-          <span class="text-sm" id="userLabel" style="color: var(--text-secondary);">USER</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-user-circle"></i>
+          <span id="userLabel" style="font-size: 13px;">USER</span>
         </div>
-        <button onclick="logout()" class="text-sm px-3 py-1.5 rounded border" style="border-color: var(--border); color: var(--text-secondary);">
+        <button onclick="logout()" style="background: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; cursor: pointer;">
           <i class="fas fa-sign-out-alt"></i>
         </button>
       </div>
     </div>
-  </div>
 
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 py-5">
-    
-    <!-- Statistics Row -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <div class="stat-card">
-        <div class="stat-label">Total Alat</div>
-        <div class="stat-value" id="statTotal">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Valid</div>
-        <div class="stat-value" style="color: var(--success);" id="statValid">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Jatuh Tempo</div>
-        <div class="stat-value" style="color: var(--warning);" id="statDue">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Overdue</div>
-        <div class="stat-value" style="color: var(--danger);" id="statOverdue">0</div>
-      </div>
-    </div>
-
-    <!-- Action Bar -->
-    <div class="flex flex-wrap gap-3 mb-5">
-      <div class="flex-1 min-w-[200px]">
-        <div class="relative">
-          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-xs" style="color: var(--text-muted);"></i>
-          <input type="text" id="searchInput" class="input-field pl-8" placeholder="Cari nama alat, no. control, atau lokasi...">
+    <!-- Content -->
+    <div style="padding: 24px;">
+      
+      <!-- Stats Row -->
+      <div class="grid-cols-4" style="margin-bottom: 24px;">
+        <div class="stat-card">
+          <div class="stat-title"><i class="fas fa-microscope"></i> Total Alat</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title"><i class="fas fa-check-circle"></i> Valid</div>
+          <div class="stat-value" style="color: var(--success);" id="statValid">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title"><i class="fas fa-hourglass-half"></i> Jatuh Tempo</div>
+          <div class="stat-value" style="color: var(--warning);" id="statDue">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title"><i class="fas fa-clock"></i> Outstanding</div>
+          <div class="stat-value" style="color: var(--danger);" id="statOutstanding">0</div>
         </div>
       </div>
-      <button onclick="openModal()" class="btn-primary">
-        <i class="fas fa-plus"></i> Tambah Alat
-      </button>
-      <button onclick="triggerEmail()" class="btn-secondary">
-        <i class="fas fa-envelope"></i> Kirim Notifikasi
-      </button>
-    </div>
 
-    <!-- Data Table -->
-    <div class="card table-wrap">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama Alat</th>
-            <th>No. Seri</th>
-            <th>No. Control</th>
-            <th>Kemampuan</th>
-            <th>Merk</th>
-            <th>Tahun</th>
-            <th>Lokasi</th>
-            <th>Periode</th>
-            <th>Tgl Kalibrasi</th>
-            <th>Status</th>
-            <th style="text-align: center;">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr><td colspan="12" style="text-align: center; padding: 40px;">Memuat data...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </main>
+      <!-- Chart & Recent Activity Row -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+        <!-- Grafik Jatuh Tempo per Bulan -->
+        <div class="chart-container">
+          <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 16px;">
+            <i class="fas fa-chart-line"></i> Proyeksi Jatuh Tempo
+          </h3>
+          <canvas id="dueChart" style="max-height: 250px;"></canvas>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div>
+          <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">
+            <i class="fas fa-bolt"></i> Aksi Cepat
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div class="quick-action-btn" onclick="location.href='alat.html'">
+              <i class="fas fa-plus-circle" style="font-size: 24px; margin-bottom: 8px;"></i>
+              <div style="font-size: 12px;">Tambah Alat Baru</div>
+            </div>
+            <div class="quick-action-btn" onclick="triggerEmail()">
+              <i class="fas fa-paper-plane" style="font-size: 24px; margin-bottom: 8px;"></i>
+              <div style="font-size: 12px;">Kirim Notifikasi</div>
+            </div>
+            <div class="quick-action-btn" onclick="location.href='outstanding.html'">
+              <i class="fas fa-clipboard-list" style="font-size: 24px; margin-bottom: 8px;"></i>
+              <div style="font-size: 12px;">Lihat Outstanding</div>
+            </div>
+            <div class="quick-action-btn" onclick="location.href='jadwal.html'">
+              <i class="fas fa-calendar-week" style="font-size: 24px; margin-bottom: 8px;"></i>
+              <div style="font-size: 12px;">Jadwal Kalibrasi</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <!-- Modal -->
-  <div id="modal" class="modal-overlay hidden">
-    <div class="modal-container">
-      <div class="p-5">
-        <div class="flex justify-between items-center mb-4">
-          <h2 id="modalTitle" class="text-lg font-semibold" style="color: var(--text-primary);">Tambah Alat</h2>
-          <button onclick="closeModal()" style="color: var(--text-muted);">
-            <i class="fas fa-times"></i>
+      <!-- Alat Mendekati Jatuh Tempo (Top 5) -->
+      <div class="recent-list" style="margin-bottom: 24px;">
+        <div style="padding: 16px; border-bottom: 1px solid var(--border);">
+          <h3 style="font-size: 14px; font-weight: 600;">
+            <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i> Alat Mendekati Jatuh Tempo (≤30 hari)
+          </h3>
+        </div>
+        <div id="nearDueList">
+          <div style="padding: 16px; text-align: center; color: var(--text-muted);">Memuat data...</div>
+        </div>
+      </div>
+
+      <!-- Informasi PIC -->
+      <div style="background: var(--accent-light); border: 1px solid var(--border); border-radius: 12px; padding: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <i class="fas fa-info-circle"></i> 
+            <strong>Informasi PIC Kalibrasi</strong><br>
+            <small>Pastikan email PIC terisi untuk menerima notifikasi otomatis H-30 jatuh tempo.</small>
+          </div>
+          <button class="btn-primary" onclick="location.href='pic.html'" style="padding: 8px 16px;">
+            <i class="fas fa-edit"></i> Kelola PIC
           </button>
         </div>
-        <form id="formAlat">
-          <input type="hidden" id="editIndex" value="-1">
-          <div class="grid grid-cols-2 gap-3 mb-3">
-            <input type="text" id="f_nama" required class="input-field" placeholder="Nama Alat *">
-            <input type="text" id="f_seri" required class="input-field" placeholder="No. Seri *">
-          </div>
-          <div class="grid grid-cols-2 gap-3 mb-3">
-            <input type="text" id="f_control" required class="input-field" placeholder="No. Control *">
-            <input type="text" id="f_kemampuan" class="input-field" placeholder="Kemampuan Pengukuran">
-          </div>
-          <div class="grid grid-cols-2 gap-3 mb-3">
-            <input type="text" id="f_merk" class="input-field" placeholder="Merk">
-            <input type="number" id="f_tahun" class="input-field" placeholder="Tahun Pemakaian">
-          </div>
-          <div class="grid grid-cols-2 gap-3 mb-3">
-            <input type="text" id="f_lokasi" value="PAINTING (Booth L)" class="input-field" placeholder="Lokasi">
-            <select id="f_periode" class="input-field">
-              <option value="1 Bulan">1 Bulan</option>
-              <option value="3 Bulan">3 Bulan</option>
-              <option value="6 Bulan">6 Bulan</option>
-              <option value="1 Tahun" selected>1 Tahun</option>
-            </select>
-          </div>
-          <div class="grid grid-cols-2 gap-3 mb-3">
-            <input type="date" id="f_tgl" class="input-field">
-            <input type="email" id="f_email" class="input-field" placeholder="Email PIC">
-          </div>
-          <textarea id="f_ket" rows="2" class="input-field mb-4" placeholder="Keterangan"></textarea>
-          <div class="flex gap-3">
-            <button type="button" onclick="closeModal()" class="btn-secondary flex-1">Batal</button>
-            <button type="submit" class="btn-primary flex-1">Simpan</button>
-          </div>
-        </form>
       </div>
+      
     </div>
   </div>
 
+  <script src="script.js"></script>
   <script>
     // ========== KONFIGURASI ==========
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXX/exec'; // GANTI DENGAN URL ANDA
-
-    // ========== THEME MANAGEMENT ==========
-    function initTheme() {
-      const saved = localStorage.getItem('theme') || 'dark';
-      setTheme(saved);
-    }
+    // GANTI DENGAN API_URL ANDA
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXX/exec';
     
-    function setTheme(theme) {
-      if (theme === 'light') {
-        document.body.classList.add('light-mode');
-      } else {
-        document.body.classList.remove('light-mode');
-      }
-      localStorage.setItem('theme', theme);
-      
-      // Update active state di toggle
-      document.querySelectorAll('.theme-option').forEach(opt => {
-        if (opt.dataset.theme === theme) {
-          opt.classList.add('active');
-        } else {
-          opt.classList.remove('active');
-        }
-      });
-    }
-    
-    function toggleThemeUI(theme) {
-      setTheme(theme);
-    }
-    
-    // Event listener untuk theme toggle
-    document.querySelectorAll('.theme-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        toggleThemeUI(opt.dataset.theme);
-      });
-    });
-
-    // ========== AUTH ==========
-    if(sessionStorage.getItem('auth') !== '1') window.location.replace('index.html');
-    document.getElementById('userLabel').innerHTML = (sessionStorage.getItem('user') || 'USER').toUpperCase();
-
-    // ========== DATA ==========
     let allData = [];
 
-    async function loadData() {
+    // ========== LOAD DATA ==========
+    async function loadDashboardData() {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
-        allData = data.map((d, i) => ({...d, _idx: i}));
-        renderTable(allData);
+        allData = data;
         updateStats(allData);
+        renderNearDueList(allData);
+        renderChart(allData);
       } catch(e) {
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding:40px; color:var(--danger);">Gagal memuat data</td></tr>`;
+        console.error(e);
+        document.getElementById('nearDueList').innerHTML = '<div style="padding:16px;text-align:center;color:var(--danger);">Gagal memuat data</div>';
       }
     }
 
+    // Hitung status kalibrasi
     function calcStatus(tgl, periode) {
-      if(!tgl) return { label: 'Belum Kalibrasi', cls: 'badge-overdue' };
+      if(!tgl) return { label: 'Belum Kalibrasi', days: null };
       const t = new Date(tgl), now = new Date();
       let next = new Date(t);
       const p = (periode||'').toLowerCase();
@@ -517,146 +256,138 @@
       else next.setFullYear(next.getFullYear() + 1);
       
       const diff = Math.ceil((next - now) / 86400000);
-      if(diff < 0) return { label: 'Overdue', cls: 'badge-overdue' };
-      if(diff <= 30) return { label: 'Jatuh Tempo', cls: 'badge-due' };
-      return { label: 'Valid', cls: 'badge-valid' };
-    }
-
-    function renderTable(data) {
-      const tb = document.getElementById('tableBody');
-      if(!data.length) {
-        tb.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:40px; color:var(--text-muted);">Tidak ada data</td></tr>`;
-        return;
-      }
-      
-      tb.innerHTML = data.map((r, i) => {
-        const st = calcStatus(r.tanggal_kalibrasi, r.periode_kalibrasi);
-        return `<tr>
-          <td>${i+1}</td>
-          <td><span style="font-weight:500;">${r.nama_alat||'-'}</span></td>
-          <td style="color: var(--text-secondary);">${r.nomor_seri||'-'}</td>
-          <td><span style="font-family: monospace; color: var(--accent);">${r.nomor_control||'-'}</span></td>
-          <td style="color: var(--text-secondary);">${r.kemampuan_pengukuran||'-'}</td>
-          <td style="color: var(--text-secondary);">${r.merk||'-'}</td>
-          <td style="color: var(--text-secondary);">${r.tahun_pemakaian||'-'}</td>
-          <td style="color: var(--text-secondary);">${r.lokasi_pemakaian||'-'}</td>
-          <td style="color: var(--text-secondary);">${r.periode_kalibrasi||'-'}</td>
-          <td style="color: var(--text-secondary);">${r.tanggal_kalibrasi ? new Date(r.tanggal_kalibrasi).toLocaleDateString('id-ID') : '-'}</td>
-          <td><span class="badge ${st.cls}">${st.label}</span></td>
-          <td style="text-align:center;">
-            <button onclick="editItem(${r._idx})" style="color: var(--accent); margin:0 4px;"><i class="fas fa-edit"></i></button>
-            <button onclick="deleteItem(${r._idx})" style="color: var(--danger); margin:0 4px;"><i class="fas fa-trash"></i></button>
-          </td>
-        八`;
-      }).join('');
+      return { label: diff < 0 ? 'Overdue' : (diff <= 30 ? 'Jatuh Tempo' : 'Valid'), days: diff };
     }
 
     function updateStats(data) {
-      let v=0, d=0, o=0;
+      let total = data.length;
+      let valid = 0, due = 0, overdue = 0;
       data.forEach(r => {
-        const s = calcStatus(r.tanggal_kalibrasi, r.periode_kalibrasi);
-        if(s.label==='Valid') v++;
-        else if(s.label==='Jatuh Tempo') d++;
-        else o++;
+        const status = calcStatus(r.tanggal_kalibrasi, r.periode_kalibrasi);
+        if(status.label === 'Valid') valid++;
+        else if(status.label === 'Jatuh Tempo') due++;
+        else if(status.label === 'Overdue') overdue++;
       });
-      document.getElementById('statTotal').textContent = data.length;
-      document.getElementById('statValid').textContent = v;
-      document.getElementById('statDue').textContent = d;
-      document.getElementById('statOverdue').textContent = o;
+      // Outstanding di sini saya asumsikan = overdue + belum kembali (jika ada flag)
+      // Sementara kita pakai overdue sebagai outstanding
+      document.getElementById('statTotal').innerText = total;
+      document.getElementById('statValid').innerText = valid;
+      document.getElementById('statDue').innerText = due;
+      document.getElementById('statOutstanding').innerText = overdue;
     }
 
-    // Search
-    document.getElementById('searchInput').addEventListener('input', e => {
-      const q = e.target.value.toLowerCase();
-      const filtered = allData.filter(r => 
-        (r.nama_alat||'').toLowerCase().includes(q) ||
-        (r.nomor_control||'').toLowerCase().includes(q) ||
-        (r.lokasi_pemakaian||'').toLowerCase().includes(q)
-      );
-      renderTable(filtered);
-    });
-
-    // Modal
-    function openModal(idx=-1) {
-      document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('modalTitle').innerText = idx===-1 ? 'Tambah Alat' : 'Edit Alat';
-      document.getElementById('editIndex').value = idx;
-      if(idx===-1) {
-        document.getElementById('formAlat').reset();
-        document.getElementById('f_lokasi').value = 'PAINTING (Booth L)';
-      } else {
-        const r = allData[idx];
-        document.getElementById('f_nama').value = r.nama_alat||'';
-        document.getElementById('f_seri').value = r.nomor_seri||'';
-        document.getElementById('f_control').value = r.nomor_control||'';
-        document.getElementById('f_kemampuan').value = r.kemampuan_pengukuran||'';
-        document.getElementById('f_merk').value = r.merk||'';
-        document.getElementById('f_tahun').value = r.tahun_pemakaian||'';
-        document.getElementById('f_lokasi').value = r.lokasi_pemakaian||'';
-        document.getElementById('f_periode').value = r.periode_kalibrasi||'1 Tahun';
-        document.getElementById('f_tgl').value = r.tanggal_kalibrasi||'';
-        document.getElementById('f_email').value = r.email_pic||'';
-        document.getElementById('f_ket').value = r.keterangan||'';
+    function renderNearDueList(data) {
+      const now = new Date();
+      const nearDue = data.filter(r => {
+        const status = calcStatus(r.tanggal_kalibrasi, r.periode_kalibrasi);
+        return status.days !== null && status.days >= 0 && status.days <= 30;
+      }).sort((a,b) => {
+        const da = calcStatus(a.tanggal_kalibrasi, a.periode_kalibrasi).days;
+        const db = calcStatus(b.tanggal_kalibrasi, b.periode_kalibrasi).days;
+        return da - db;
+      }).slice(0, 5);
+      
+      const container = document.getElementById('nearDueList');
+      if(nearDue.length === 0) {
+        container.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-muted);">Tidak ada alat yang mendekati jatuh tempo</div>';
+        return;
       }
+      
+      container.innerHTML = nearDue.map(r => {
+        const status = calcStatus(r.tanggal_kalibrasi, r.periode_kalibrasi);
+        return `
+          <div class="recent-item">
+            <div>
+              <span class="notification-badge" style="background: ${status.days <= 7 ? 'var(--danger)' : 'var(--warning)'};"></span>
+              <strong>${r.nama_alat || '-'}</strong> 
+              <span style="font-size: 12px; color: var(--text-muted);">(${r.nomor_control || '-'})</span>
+            </div>
+            <div style="font-size: 12px;">
+              <span class="badge ${status.label === 'Jatuh Tempo' ? 'badge-warning' : 'badge-danger'}">
+                ${status.days} hari lagi
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
-    
-    function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
-    document.getElementById('formAlat').addEventListener('submit', async e => {
-      e.preventDefault();
-      const idx = parseInt(document.getElementById('editIndex').value);
-      const payload = {
-        action: idx===-1 ? 'add' : 'update',
-        _index: idx,
-        nama_alat: document.getElementById('f_nama').value,
-        nomor_seri: document.getElementById('f_seri').value,
-        nomor_control: document.getElementById('f_control').value,
-        kemampuan_pengukuran: document.getElementById('f_kemampuan').value,
-        merk: document.getElementById('f_merk').value,
-        tahun_pemakaian: document.getElementById('f_tahun').value,
-        lokasi_pemakaian: document.getElementById('f_lokasi').value,
-        periode_kalibrasi: document.getElementById('f_periode').value,
-        tanggal_kalibrasi: document.getElementById('f_tgl').value,
-        email_pic: document.getElementById('f_email').value,
-        keterangan: document.getElementById('f_ket').value
-      };
+    function renderChart(data) {
+      // Hitung jumlah jatuh tempo per bulan (6 bulan ke depan)
+      const months = [];
+      const counts = [];
+      const now = new Date();
+      
+      for(let i = 1; i <= 6; i++) {
+        const targetMonth = new Date(now.getFullYear(), now.getMonth() + i, 1);
+        const monthName = targetMonth.toLocaleString('id-ID', { month: 'short' });
+        months.push(monthName);
+        
+        let count = 0;
+        data.forEach(r => {
+          if(!r.tanggal_kalibrasi || !r.periode_kalibrasi) return;
+          const dueDate = new Date(r.tanggal_kalibrasi);
+          const p = (r.periode_kalibrasi||'').toLowerCase();
+          if(p.includes('bulan')) dueDate.setMonth(dueDate.getMonth() + parseInt(p));
+          else if(p.includes('tahun')) dueDate.setFullYear(dueDate.getFullYear() + parseInt(p));
+          else dueDate.setFullYear(dueDate.getFullYear() + 1);
+          
+          if(dueDate.getMonth() === targetMonth.getMonth() && 
+             dueDate.getFullYear() === targetMonth.getFullYear()) {
+            count++;
+          }
+        });
+        counts.push(count);
+      }
+      
+      const ctx = document.getElementById('dueChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'Jatuh Tempo',
+            data: counts,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59,130,246,0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { position: 'top', labels: { color: 'var(--text-secondary)' } }
+          },
+          scales: {
+            y: { beginAtZero: true, grid: { color: 'var(--border)' }, ticks: { color: 'var(--text-secondary)' } },
+            x: { ticks: { color: 'var(--text-secondary)' } }
+          }
+        }
+      });
+    }
 
-      const btn = e.target.querySelector('button[type="submit"]');
-      const orig = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      btn.disabled = true;
-
-      try {
-        await fetch(API_URL, { method:'POST', body: JSON.stringify(payload) });
-        closeModal();
-        await loadData();
-      } catch(err) { alert('Gagal menyimpan'); }
-      finally { btn.innerHTML = orig; btn.disabled = false; }
-    });
-
-    window.editItem = (idx) => openModal(idx);
-    window.deleteItem = async (idx) => {
-      if(!confirm('Hapus alat ini?')) return;
-      try {
-        await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'delete', _index: idx }) });
-        await loadData();
-      } catch(e) { alert('Gagal hapus'); }
-    };
-    window.triggerEmail = async () => {
-      if(!confirm('Kirim notifikasi email ke PIC?')) return;
+    window.triggerEmail = async function() {
+      if(!confirm('Kirim notifikasi email untuk semua alat yang jatuh tempo?')) return;
       try {
         await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'send_notification' }) });
-        alert('Notifikasi terkirim');
-      } catch(e) { alert('Gagal kirim'); }
-    };
-    window.logout = () => {
-      sessionStorage.clear();
-      window.location.replace('index.html');
+        alert('✅ Notifikasi terkirim!');
+      } catch(e) {
+        alert('❌ Gagal mengirim notifikasi');
+      }
     };
 
-    // Init
-    initTheme();
-    loadData();
+    window.logout = function() {
+      sessionStorage.clear();
+      window.location.href = 'index.html';
+    };
+
+    // Inisialisasi
+    if(sessionStorage.getItem('auth') !== '1') window.location.href = 'index.html';
+    document.getElementById('userLabel').innerText = (sessionStorage.getItem('user') || 'USER').toUpperCase();
+    
+    loadDashboardData();
   </script>
 </body>
 </html>
