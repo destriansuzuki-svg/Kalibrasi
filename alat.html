@@ -4,354 +4,216 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Data Alat - Kalibrasi Painting 2W</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Tambahan untuk modal dan form */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(2px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.2s;
-    }
-    
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .modal-container {
-      background: var(--bg-card);
-      border-radius: 20px;
-      width: 90%;
-      max-width: 600px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-    }
-    
-    .modal-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .modal-body {
-      padding: 24px;
-    }
-    
-    .modal-footer {
-      padding: 16px 24px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-    }
-    
-    .form-group {
-      margin-bottom: 16px;
-    }
-    
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-    
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    
-    .filter-bar {
-      display: flex;
-      gap: 12px;
+    /* Additional styles for better form appearance */
+    .form-section {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 16px;
       margin-bottom: 20px;
-      flex-wrap: wrap;
     }
     
-    .filter-bar .input-field {
-      flex: 1;
-      min-width: 200px;
-    }
-    
-    .action-buttons {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .action-buttons button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-    
-    .btn-edit { color: var(--primary); }
-    .btn-edit:hover { background: var(--primary-bg); }
-    .btn-delete { color: var(--danger); }
-    .btn-delete:hover { background: #fee2e2; }
-    
-    .table-container {
-      overflow-x: auto;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-    }
-    
-    .data-table {
-      width: 100%;
+    .form-section-title {
       font-size: 13px;
-      border-collapse: collapse;
-    }
-    
-    .data-table th,
-    .data-table td {
-      padding: 14px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .data-table th {
-      background: var(--bg-page);
       font-weight: 600;
-      color: var(--text-muted);
+      color: #475569;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
     }
     
-    .data-table tr:hover td {
-      background: var(--primary-bg);
-    }
-    
-    .empty-row td {
-      text-align: center;
-      padding: 48px !important;
-      color: var(--text-muted);
-    }
-    
-    .status-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
+    .info-text {
       font-size: 11px;
-      font-weight: 600;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    
+    .required-star {
+      color: #ef4444;
+      margin-left: 2px;
     }
     
     @media (max-width: 768px) {
-      .form-row {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-      .modal-container {
-        width: 95%;
-      }
-      .data-table th, .data-table td {
-        padding: 10px 12px;
+      .form-section {
+        padding: 12px;
       }
     }
   </style>
 </head>
 <body>
-
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="logo-icon">
-        <i class="fas fa-microscope" style="color: white;"></i>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon"><i class="fas fa-microscope" style="color: white;"></i></div>
+        <div class="logo-text">Kalibrasi System</div>
       </div>
-      <div class="logo-text">Kalibrasi System</div>
-    </div>
-    <nav class="nav-menu">
-      <a href="dashboard.html" class="nav-item">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </a>
-      <a href="alat.html" class="nav-item active">
-        <i class="fas fa-tools"></i> Data Alat
-      </a>
-      <a href="outstanding.html" class="nav-item">
-        <i class="fas fa-clock"></i> Outstanding
-      </a>
-      <a href="jadwal.html" class="nav-item">
-        <i class="fas fa-calendar-alt"></i> Jadwal Kalibrasi
-      </a>
-      <a href="log-notif.html" class="nav-item">
-        <i class="fas fa-envelope"></i> Log Notifikasi
-      </a>
-      <a href="pic.html" class="nav-item">
-        <i class="fas fa-users"></i> PIC & Lokasi
-      </a>
-    </nav>
-  </aside>
+      <nav class="nav-menu">
+        <a href="dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="alat.html" class="nav-item active"><i class="fas fa-tools"></i> Data Alat</a>
+        <a href="outstanding.html" class="nav-item"><i class="fas fa-clock"></i> Outstanding</a>
+        <a href="jadwal.html" class="nav-item"><i class="fas fa-calendar-alt"></i> Jadwal Kalibrasi</a>
+        <a href="log-notif.html" class="nav-item"><i class="fas fa-envelope"></i> Log Notifikasi</a>
+        <a href="pic.html" class="nav-item"><i class="fas fa-users"></i> PIC & Lokasi</a>
+      </nav>
+    </aside>
 
-  <!-- Main Content -->
-  <div class="main-content" id="mainContent">
-    <!-- Topbar -->
-    <div class="topbar">
-      <button class="menu-toggle" id="menuToggle">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="user-info">
-        <span id="userLabel" style="font-size: 14px; font-weight: 500;">User</span>
-        <div class="avatar">
-          <i class="fas fa-user"></i>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+      <div class="topbar">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <div class="user-info">
+          <span id="userLabel">User</span>
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <button onclick="logout()" style="background:none; border:none; font-size:18px; cursor:pointer;"><i class="fas fa-sign-out-alt"></i></button>
         </div>
-        <button onclick="logout()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">
-          <i class="fas fa-sign-out-alt"></i>
-        </button>
       </div>
-    </div>
 
-    <!-- Content -->
-    <div style="padding: 24px;">
-      
-      <!-- Header -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <h2 style="font-size: 20px; font-weight: 700;">Data Alat Kalibrasi</h2>
-          <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Kelola master data alat-alat painting</p>
+      <div class="content-padding">
+        <!-- Header -->
+        <div class="flex-between">
+          <div>
+            <h1 class="page-title">Data Alat Kalibrasi</h1>
+            <p class="page-subtitle">Kelola master data alat-alat painting</p>
+          </div>
+          <button class="btn-primary" onclick="openModal()">
+            <i class="fas fa-plus"></i> Tambah Alat
+          </button>
         </div>
-        <button class="btn-primary" onclick="openModal()">
-          <i class="fas fa-plus"></i> Tambah Alat
-        </button>
-      </div>
 
-      <!-- Filter Bar -->
-      <div class="filter-bar">
-        <input type="text" id="searchInput" class="input-field" placeholder="🔍 Cari nama alat, no. control, atau lokasi...">
-        <select id="statusFilter" class="input-field" style="width: auto; min-width: 130px;">
-          <option value="all">Semua Status</option>
-          <option value="Valid">Valid</option>
-          <option value="Jatuh Tempo">Jatuh Tempo</option>
-          <option value="Overdue">Overdue</option>
-        </select>
-        <button class="btn-outline" onclick="exportToCSV()">
-          <i class="fas fa-download"></i> Export CSV
-        </button>
-      </div>
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <input type="text" id="searchInput" class="input-field" placeholder="Cari nama alat, no. control, atau lokasi...">
+          <select id="statusFilter" class="input-field" style="width: 150px;">
+            <option value="all">Semua Status</option>
+            <option value="Valid">Valid</option>
+            <option value="Jatuh Tempo">Jatuh Tempo</option>
+            <option value="Overdue">Overdue</option>
+          </select>
+          <button class="btn-outline" onclick="exportToCSV()">
+            <i class="fas fa-download"></i> Export CSV
+          </button>
+        </div>
 
-      <!-- Table -->
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>No. Control</th>
-              <th>Nama Alat</th>
-              <th>No. Seri</th>
-              <th>Merk</th>
-              <th>Lokasi</th>
-              <th>Tgl Kalibrasi</th>
-              <th>Periode</th>
-              <th>Status</th>
-              <th style="text-align: center;">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <tr><td colspan="9" class="empty-row"><i class="fas fa-spinner fa-spin"></i> Memuat data...</td</tr>
-          </tbody>
-        </table>
+        <!-- Table -->
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>No. Control</th>
+                <th>Nama Alat</th>
+                <th>No. Seri</th>
+                <th>Merk</th>
+                <th>Lokasi</th>
+                <th>Tgl Kalibrasi</th>
+                <th>Periode</th>
+                <th>Status</th>
+                <th style="text-align: center;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr><td colspan="9" class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat data...</td</td>
+            </tbody>
+          </table>
+        </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Modal Tambah/Edit -->
-  <div id="modal" class="modal-overlay">
-    <div class="modal-container">
+  <!-- Modal Form -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
       <div class="modal-header">
-        <h3 id="modalTitle" style="font-size: 18px; font-weight: 700;">Tambah Alat</h3>
-        <button onclick="closeModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted);">
-          <i class="fas fa-times"></i>
-        </button>
+        <h3 id="modalTitle">Tambah Alat</h3>
+        <button onclick="closeModal()" style="background:none; border:none; font-size:20px; cursor:pointer;">&times;</button>
       </div>
       <form id="formAlat">
         <div class="modal-body">
           <input type="hidden" id="editIndex" value="-1">
           
-          <div class="form-row">
-            <div class="form-group">
-              <label>Nama Alat <span style="color: var(--danger);">*</span></label>
-              <input type="text" id="f_nama" class="input-field" required placeholder="Contoh: Spray Gun ALT-01">
+          <!-- Informasi Utama -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fas fa-info-circle"></i> Informasi Utama</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nama Alat <span class="required-star">*</span></label>
+                <input type="text" id="f_nama" class="input-field" required placeholder="Contoh: Spray Gun ALT-01">
+              </div>
+              <div class="form-group">
+                <label>No. Seri <span class="required-star">*</span></label>
+                <input type="text" id="f_seri" class="input-field" required placeholder="Nomor seri alat">
+              </div>
             </div>
-            <div class="form-group">
-              <label>No. Seri <span style="color: var(--danger);">*</span></label>
-              <input type="text" id="f_seri" class="input-field" required placeholder="Nomor seri alat">
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label>No. Control <span style="color: var(--danger);">*</span></label>
-              <input type="text" id="f_control" class="input-field" required placeholder="Contoh: ALT-001">
-            </div>
-            <div class="form-group">
-              <label>Kemampuan Pengukuran</label>
-              <input type="text" id="f_kemampuan" class="input-field" placeholder="Contoh: 0-100 bar">
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label>Merk</label>
-              <input type="text" id="f_merk" class="input-field" placeholder="Merk alat">
-            </div>
-            <div class="form-group">
-              <label>Tahun Pemakaian</label>
-              <input type="number" id="f_tahun" class="input-field" placeholder="Tahun">
+            <div class="form-row">
+              <div class="form-group">
+                <label>No. Control <span class="required-star">*</span></label>
+                <input type="text" id="f_control" class="input-field" required placeholder="Contoh: ALT-001">
+                <div class="info-text">Kode unik identifikasi alat</div>
+              </div>
+              <div class="form-group">
+                <label>Kemampuan Pengukuran</label>
+                <input type="text" id="f_kemampuan" class="input-field" placeholder="Contoh: 0-100 bar">
+              </div>
             </div>
           </div>
           
-          <div class="form-row">
-            <div class="form-group">
-              <label>Lokasi Pemakaian</label>
-              <input type="text" id="f_lokasi" class="input-field" value="PAINTING (Booth L)" placeholder="Lokasi">
+          <!-- Spesifikasi Alat -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fas fa-microchip"></i> Spesifikasi Alat</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Merk</label>
+                <input type="text" id="f_merk" class="input-field" placeholder="Merk alat">
+              </div>
+              <div class="form-group">
+                <label>Tahun Pemakaian</label>
+                <input type="number" id="f_tahun" class="input-field" placeholder="Tahun">
+              </div>
             </div>
-            <div class="form-group">
-              <label>Periode Kalibrasi</label>
-              <select id="f_periode" class="input-field">
-                <option value="1 Bulan">1 Bulan</option>
-                <option value="3 Bulan">3 Bulan</option>
-                <option value="6 Bulan">6 Bulan</option>
-                <option value="1 Tahun" selected>1 Tahun</option>
-              </select>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Lokasi Pemakaian</label>
+                <input type="text" id="f_lokasi" class="input-field" value="PAINTING (Booth L)" placeholder="Lokasi">
+              </div>
+              <div class="form-group">
+                <label>Periode Kalibrasi</label>
+                <select id="f_periode" class="input-field">
+                  <option value="1 Bulan">1 Bulan</option>
+                  <option value="3 Bulan">3 Bulan</option>
+                  <option value="6 Bulan">6 Bulan</option>
+                  <option value="1 Tahun" selected>1 Tahun</option>
+                </select>
+              </div>
             </div>
           </div>
           
-          <div class="form-row">
-            <div class="form-group">
-              <label>Tanggal Kalibrasi Terakhir</label>
-              <input type="date" id="f_tgl" class="input-field">
+          <!-- Jadwal & Kontak -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fas fa-calendar-alt"></i> Jadwal & Kontak</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tanggal Kalibrasi Terakhir</label>
+                <input type="date" id="f_tgl" class="input-field">
+                <div class="info-text">Kosongkan jika belum pernah dikalibrasi</div>
+              </div>
+              <div class="form-group">
+                <label>Email PIC</label>
+                <input type="email" id="f_email" class="input-field" placeholder="email@example.com">
+                <div class="info-text">Untuk menerima notifikasi H-30 jatuh tempo</div>
+              </div>
             </div>
             <div class="form-group">
-              <label>Email PIC</label>
-              <input type="email" id="f_email" class="input-field" placeholder="email@example.com">
+              <label>Keterangan</label>
+              <textarea id="f_ket" rows="2" class="input-field" placeholder="Catatan tambahan..."></textarea>
             </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Keterangan</label>
-            <textarea id="f_ket" rows="2" class="input-field" placeholder="Catatan tambahan..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn-outline" onclick="closeModal()">Batal</button>
-          <button type="submit" class="btn-primary">
-            <i class="fas fa-save"></i> Simpan
-          </button>
+          <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Simpan</button>
         </div>
       </form>
     </div>
@@ -368,9 +230,7 @@
     // ========== SIDEBAR TOGGLE ==========
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
-    const menuToggle = document.getElementById('menuToggle');
-    
-    menuToggle.addEventListener('click', () => {
+    document.getElementById('menuToggle').addEventListener('click', () => {
       sidebar.classList.toggle('hidden');
       mainContent.classList.toggle('sidebar-hidden');
     });
@@ -381,7 +241,7 @@
 
     // ========== HELPER FUNCTIONS ==========
     function calcStatus(tgl, periode) {
-      if(!tgl) return { label: 'Belum Kalibrasi', days: null, cls: 'badge-danger' };
+      if(!tgl) return { label: 'Belum Kalibrasi', days: null, cls: 'badge-warning' };
       const t = new Date(tgl), now = new Date();
       let next = new Date(t);
       const p = (periode||'').toLowerCase();
@@ -395,12 +255,6 @@
       return { label: 'Valid', days: diff, cls: 'badge-success' };
     }
 
-    function getStatusClass(label) {
-      if(label === 'Valid') return 'badge-success';
-      if(label === 'Jatuh Tempo') return 'badge-warning';
-      return 'badge-danger';
-    }
-
     // ========== LOAD DATA ==========
     async function loadData() {
       try {
@@ -410,7 +264,7 @@
         applyFilters();
       } catch(e) {
         console.error(e);
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td</tr>`;
+        document.getElementById('tableBody').innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>`;
       }
     }
 
@@ -419,13 +273,11 @@
       const statusFilter = document.getElementById('statusFilter').value;
       
       filteredData = allData.filter(item => {
-        // Search filter
         const matchSearch = !searchTerm || 
           (item.nama_alat || '').toLowerCase().includes(searchTerm) ||
           (item.nomor_control || '').toLowerCase().includes(searchTerm) ||
           (item.lokasi_pemakaian || '').toLowerCase().includes(searchTerm);
         
-        // Status filter
         const status = calcStatus(item.tanggal_kalibrasi, item.periode_kalibrasi);
         const matchStatus = statusFilter === 'all' || status.label === statusFilter;
         
@@ -439,26 +291,28 @@
       const tbody = document.getElementById('tableBody');
       
       if(data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-folder-open"></i> Tidak ada data</td</tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-folder-open"></i> Tidak ada data</td></tr>`;
         return;
       }
       
       tbody.innerHTML = data.map(item => {
         const status = calcStatus(item.tanggal_kalibrasi, item.periode_kalibrasi);
-        return `<tr>
-          <td><strong style="font-family: monospace;">${item.nomor_control || '-'}</strong></td>
-          <td>${item.nama_alat || '-'}</td>
-          <td style="color: var(--text-muted);">${item.nomor_seri || '-'}</td>
-          <td>${item.merk || '-'}</td>
-          <td>${item.lokasi_pemakaian || '-'}</td>
-          <td style="color: var(--text-muted);">${item.tanggal_kalibrasi ? new Date(item.tanggal_kalibrasi).toLocaleDateString('id-ID') : '-'}</td>
-          <td>${item.periode_kalibrasi || '-'}</td>
-          <td><span class="status-badge ${status.cls}">${status.label}</span></td>
-          <td class="action-buttons">
-            <button class="btn-edit" onclick="editItem(${item._idx})" title="Edit"><i class="fas fa-edit"></i></button>
-            <button class="btn-delete" onclick="deleteItem(${item._idx})" title="Hapus"><i class="fas fa-trash-alt"></i></button>
-          </td>
-        </tr>`;
+        return `
+          <tr>
+            <td><strong style="font-family: monospace;">${item.nomor_control || '-'}</strong></td>
+            <td>${item.nama_alat || '-'}</td>
+            <td style="color: var(--text-muted);">${item.nomor_seri || '-'}</td>
+            <td>${item.merk || '-'}</td>
+            <td>${item.lokasi_pemakaian || '-'}</td>
+            <td>${item.tanggal_kalibrasi ? new Date(item.tanggal_kalibrasi).toLocaleDateString('id-ID') : '-'}</td>
+            <td>${item.periode_kalibrasi || '-'}</td>
+            <td><span class="badge ${status.cls}">${status.label}</span></td>
+            <td class="action-buttons">
+              <button class="btn-icon btn-edit" onclick="editItem(${item._idx})" title="Edit"><i class="fas fa-edit"></i></button>
+              <button class="btn-icon btn-delete" onclick="deleteItem(${item._idx})" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          </tr>
+        `;
       }).join('');
     }
 
@@ -526,6 +380,7 @@
         await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
         closeModal();
         await loadData();
+        alert('Data berhasil disimpan');
       } catch(err) {
         alert('Gagal menyimpan data');
       } finally {
@@ -545,6 +400,7 @@
           body: JSON.stringify({ action: 'delete', _index: idx }) 
         });
         await loadData();
+        alert('Data berhasil dihapus');
       } catch(e) {
         alert('Gagal menghapus data');
       }
@@ -560,11 +416,11 @@
       const rows = filteredData.map(item => {
         const status = calcStatus(item.tanggal_kalibrasi, item.periode_kalibrasi);
         return [
-          item.nomor_control || '',
-          item.nama_alat || '',
-          item.nomor_seri || '',
-          item.merk || '',
-          item.lokasi_pemakaian || '',
+          `"${item.nomor_control || ''}"`,
+          `"${item.nama_alat || ''}"`,
+          `"${item.nomor_seri || ''}"`,
+          `"${item.merk || ''}"`,
+          `"${item.lokasi_pemakaian || ''}"`,
           item.tanggal_kalibrasi || '',
           item.periode_kalibrasi || '',
           status.label
@@ -572,7 +428,7 @@
       });
       
       const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
-      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
