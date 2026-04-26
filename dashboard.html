@@ -1,80 +1,319 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Kalibrasi Painting 2W</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Monitoring Kalibrasi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.1);
+            padding-left: 30px;
+        }
+        .sidebar a.active {
+            background: rgba(255,255,255,0.2);
+            border-left: 4px solid white;
+        }
+        .card-stats {
+            border-radius: 15px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .card-stats:hover {
+            transform: translateY(-5px);
+        }
+        .badge-expired {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 p-6">
-  <h1 class="text-2xl font-bold mb-4">📅 Dashboard Kalibrasi - Painting 2W</h1>
+<body>
+    <div class="notification-toast" id="toastContainer"></div>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0 sidebar">
+                <div class="text-center py-4">
+                    <i class="fas fa-tools fa-3x text-white"></i>
+                    <h5 class="text-white mt-2">Kalibrasi 2W</h5>
+                </div>
+                <a href="dashboard.html" class="active">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+                <a href="alat.html">
+                    <i class="fas fa-microscope me-2"></i> Data Alat
+                </a>
+                <a href="#" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>
+                        <i class="fas fa-chart-line me-2"></i>Dashboard Monitoring
+                        <small class="text-muted" id="userName"></small>
+                    </h2>
+                    <div>
+                        <button class="btn btn-info" onclick="checkExpiredNow()">
+                            <i class="fas fa-bell"></i> Cek Notifikasi
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Statistics Cards -->
+                <div class="row mb-4" id="statsCards">
+                    <div class="col-md-3">
+                        <div class="card card-stats bg-primary text-white">
+                            <div class="card-body">
+                                <i class="fas fa-microscope fa-2x float-end"></i>
+                                <h3 id="totalAlat">0</h3>
+                                <p>Total Alat</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-stats bg-success text-white">
+                            <div class="card-body">
+                                <i class="fas fa-check-circle fa-2x float-end"></i>
+                                <h3 id="validAlat">0</h3>
+                                <p>Valid</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-stats bg-warning text-white">
+                            <div class="card-body">
+                                <i class="fas fa-hourglass-half fa-2x float-end"></i>
+                                <h3 id="warningAlat">0</h3>
+                                <p>Akan Expired (≤7 hari)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-stats bg-danger text-white">
+                            <div class="card-body">
+                                <i class="fas fa-times-circle fa-2x float-end"></i>
+                                <h3 id="expiredAlat">0</h3>
+                                <p>Expired</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Status Kalibrasi</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Alat Akan Expired</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="expiringList" style="max-height: 300px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Alat yang Perlu Segera Dikalibrasi</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="urgentTable">
+                            <thead>
+                                <tr><th>Kode Alat</th><th>Nama Alat</th><th>Lokasi</th><th>Due Date</th><th>Sisa Hari</th><th>Aksi</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <div class="grid grid-cols-4 gap-4 mb-6">
-    <div class="bg-white p-4 rounded shadow"><h3 class="text-gray-500">Total Alat</h3><p id="total" class="text-2xl font-bold">0</p></div>
-    <div class="bg-white p-4 rounded shadow"><h3 class="text-gray-500">Due This Month</h3><p id="dueMonth" class="text-2xl font-bold text-yellow-600">0</p></div>
-    <div class="bg-white p-4 rounded shadow"><h3 class="text-gray-500">Overdue</h3><p id="overdue" class="text-2xl font-bold text-red-600">0</p></div>
-    <div class="bg-white p-4 rounded shadow"><h3 class="text-gray-500">On Track</h3><p id="onTrack" class="text-2xl font-bold text-green-600">0</p></div>
-  </div>
-
-  <table class="w-full bg-white rounded shadow">
-    <thead class="bg-gray-100">
-      <tr><th class="p-3 text-left">Kode</th><th class="p-3 text-left">Nama</th><th class="p-3 text-left">Next Cal</th><th class="p-3 text-left">Status</th></tr>
-    </thead>
-    <tbody id="equipmentTable"></tbody>
-  </table>
-
-<script>
-  // Dummy data (ganti dengan fetch API/database nanti)
-  const tools = [
-    { kode: 'P2W-001', nama: 'Viscometer', next: '2026-04-10', status: '' },
-    { kode: 'P2W-002', nama: 'Spray Gun Pressure Gauge', next: '2026-05-05', status: '' },
-    { kode: 'P2W-003', nama: 'Thickness Gauge', next: '2026-03-20', status: '' },
-  ];
-
-  const today = new Date();
-  const currentMonth = today.getMonth();
-
-  function getStatus(nextDateStr) {
-    const next = new Date(nextDateStr);
-    const diffDays = (next - today) / (1000 * 60 * 60 * 24);
-    if (next < today) return 'Overdue';
-    if (diffDays <= 30) return 'Due Soon';
-    return 'On Track';
-  }
-
-  function render() {
-    let due = 0, over = 0, track = 0;
-    const tbody = document.getElementById('equipmentTable');
-    tbody.innerHTML = '';
-
-    tools.forEach(t => {
-      t.status = getStatus(t.next);
-      const nextDate = new Date(t.next);
-      if (nextDate.getMonth() === currentMonth && nextDate.getFullYear() === today.getFullYear()) due++;
-      if (t.status === 'Overdue') over++;
-      if (t.status === 'On Track') track++;
-
-      const statusClass = {
-        'Overdue': 'bg-red-100 text-red-700',
-        'Due Soon': 'bg-yellow-100 text-yellow-700',
-        'On Track': 'bg-green-100 text-green-700'
-      }[t.status];
-
-      tbody.innerHTML += `
-        <tr class="border-t hover:bg-gray-50">
-          <td class="p-3">${t.kode}</td>
-          <td class="p-3">${t.nama}</td>
-          <td class="p-3">${t.next}</td>
-          <td class="p-3"><span class="px-2 py-1 rounded text-xs font-medium ${statusClass}">${t.status}</span></td>
-        </tr>`;
-    });
-
-    document.getElementById('total').textContent = tools.length;
-    document.getElementById('dueMonth').textContent = due;
-    document.getElementById('overdue').textContent = over;
-    document.getElementById('onTrack').textContent = track;
-  }
-
-  render();
-</script>
+    <script>
+        const API_URL = 'YOUR_GOOGLE_SHEETS_API_URL';
+        let statusChart = null;
+        
+        // Cek autentikasi
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+        document.getElementById('userName').textContent = ` - ${user.nama} (${user.role})`;
+        
+        // Request izin notifikasi browser
+        if ('Notification' in window) {
+            Notification.requestPermission();
+        }
+        
+        // Fungsi notifikasi browser
+        function showBrowserNotification(title, body, url) {
+            if (Notification.permission === 'granted') {
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/190/190477.png',
+                    requireInteraction: true
+                });
+                notification.onclick = () => window.open(url);
+            }
+        }
+        
+        // Fungsi kirim email via EmailJS (daftar dulu di emailjs.com)
+        async function sendEmailNotifications(alat) {
+            // EmailJS configuration
+            // Ganti dengan public key dan service ID Anda
+            emailjs.init('YOUR_PUBLIC_KEY');
+            
+            for (const item of alat) {
+                const templateParams = {
+                    to_email: 'supervisor@suzuki.co.id',
+                    to_name: 'Supervisor Painting',
+                    alat_nama: item.nama_alat,
+                    alat_kode: item.kode_alat,
+                    due_date: item.due_date,
+                    lokasi: item.lokasi_painting
+                };
+                
+                await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+            }
+        }
+        
+        // Hitung sisa hari
+        function daysUntil(dateStr) {
+            const due = new Date(dateStr);
+            const today = new Date();
+            const diffTime = due - today;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+        
+        // Load dashboard data
+        async function loadDashboard() {
+            const response = await fetch(`${API_URL}?sheet=alat_kalibrasi`);
+            const alatData = await response.json();
+            
+            let total = alatData.length;
+            let expired = 0, warning = 0, valid = 0;
+            let expiringList = [];
+            
+            alatData.forEach(alat => {
+                const days = daysUntil(alat.due_date);
+                if (days < 0) expired++;
+                else if (days <= 7) {
+                    warning++;
+                    expiringList.push(alat);
+                }
+                else valid++;
+            });
+            
+            document.getElementById('totalAlat').textContent = total;
+            document.getElementById('validAlat').textContent = valid;
+            document.getElementById('warningAlat').textContent = warning;
+            document.getElementById('expiredAlat').textContent = expired;
+            
+            // Update chart
+            if (statusChart) statusChart.destroy();
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            statusChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Valid', 'Akan Expired (≤7 hari)', 'Expired'],
+                    datasets: [{
+                        data: [valid, warning, expired],
+                        backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                    }]
+                }
+            });
+            
+            // Update expiring list
+            const expiringDiv = document.getElementById('expiringList');
+            expiringDiv.innerHTML = expiringList.map(alat => `
+                <div class="alert alert-warning">
+                    <strong>${alat.kode_alat} - ${alat.nama_alat}</strong><br>
+                    Due: ${alat.due_date} (${daysUntil(alat.due_date)} hari lagi)<br>
+                    Lokasi: ${alat.lokasi_painting}
+                </div>
+            `).join('');
+            
+            // Update urgent table
+            const urgentTable = document.querySelector('#urgentTable tbody');
+            urgentTable.innerHTML = expiringList.map(alat => `
+                <tr>
+                    <td>${alat.kode_alat}</td>
+                    <td>${alat.nama_alat}</td>
+                    <td>${alat.lokasi_painting}</td>
+                    <td>${alat.due_date}</td>
+                    <td class="text-warning">${daysUntil(alat.due_date)} hari</td>
+                    <td><button class="btn btn-sm btn-primary" onclick="kalibrasi('${alat.id}')">Input Kalibrasi</button></td>
+                </tr>
+            `).join('');
+            
+            // Cek dan kirim notifikasi untuk yang akan expired
+            if (expiringList.length > 0) {
+                expiringList.forEach(alat => {
+                    showBrowserNotification(
+                        '⚠️ Peringatan Kalibrasi',
+                        `${alat.nama_alat} (${alat.kode_alat}) akan expired dalam ${daysUntil(alat.due_date)} hari`,
+                        'alat.html'
+                    );
+                });
+            }
+        }
+        
+        function checkExpiredNow() {
+            loadDashboard();
+            showBrowserNotification('🔔 Pengecekan Selesai', 'Silakan cek daftar alat yang perlu dikalibrasi', 'dashboard.html');
+        }
+        
+        function kalibrasi(id) {
+            localStorage.setItem('kalibrasi_alat_id', id);
+            window.location.href = 'alat.html';
+        }
+        
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+        
+        // Load setiap 1 jam
+        loadDashboard();
+        setInterval(loadDashboard, 3600000);
+    </script>
 </body>
 </html>
