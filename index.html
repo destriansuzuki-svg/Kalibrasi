@@ -14,11 +14,7 @@
             font-family: 'Segoe UI', sans-serif;
             padding: 20px;
         }
-        .login-container {
-            max-width: 500px;
-            margin: 0 auto;
-            margin-top: 5vh;
-        }
+        .login-container { max-width: 450px; margin: 5vh auto; }
         .card {
             background: white;
             border-radius: 20px;
@@ -43,11 +39,8 @@
             border: 2px solid #e1e5e9;
             border-radius: 10px;
         }
-        .form-control:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        .btn-primary {
+        .form-control:focus { outline: none; border-color: #667eea; }
+        .btn-login {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -57,16 +50,11 @@
             font-weight: 600;
             cursor: pointer;
         }
-        .btn-primary:hover { transform: translateY(-2px); }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-        }
-        .btn-outline:hover { background: #667eea; color: white; }
+        .btn-login:hover { transform: translateY(-2px); }
         .alert-message { display: none; padding: 12px; border-radius: 10px; margin-bottom: 20px; }
         .alert-danger { background: #fee2e2; color: #dc2626; }
         .alert-success { background: #dcfce7; color: #16a34a; }
+        .alert-warning { background: #fef3c7; color: #92400e; }
         .loading {
             display: inline-block;
             width: 16px;
@@ -78,6 +66,14 @@
             margin-right: 8px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .demo-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 13px;
+            text-align: center;
+        }
         .nav-tabs { margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; }
         .nav-tabs .nav-link {
             border: none;
@@ -91,16 +87,7 @@
             background: transparent;
         }
         .tab-pane { display: none; }
-        .tab-pane.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .demo-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 13px;
-            text-align: center;
-        }
+        .tab-pane.active { display: block; }
     </style>
 </head>
 <body>
@@ -116,13 +103,13 @@
                 <div id="alertMessage" class="alert-message"></div>
                 
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button">
                             <i class="fas fa-sign-in-alt"></i> Login
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="changepw-tab" data-bs-toggle="tab" data-bs-target="#changepw" type="button" role="tab">
+                    <li class="nav-item">
+                        <button class="nav-link" id="changepw-tab" data-bs-toggle="tab" data-bs-target="#changepw" type="button">
                             <i class="fas fa-key"></i> Ganti Password
                         </button>
                     </li>
@@ -130,7 +117,7 @@
                 
                 <div class="tab-content mt-4">
                     <!-- Tab Login -->
-                    <div class="tab-pane active" id="login" role="tabpanel">
+                    <div class="tab-pane active" id="login">
                         <form id="loginForm">
                             <div class="form-group">
                                 <label><i class="fas fa-envelope"></i> Email</label>
@@ -140,14 +127,14 @@
                                 <label><i class="fas fa-lock"></i> Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
                             </div>
-                            <button type="submit" class="btn-primary" id="loginBtn">
+                            <button type="submit" class="btn-login" id="loginBtn">
                                 <i class="fas fa-sign-in-alt"></i> Login
                             </button>
                         </form>
                     </div>
                     
                     <!-- Tab Ganti Password -->
-                    <div class="tab-pane" id="changepw" role="tabpanel">
+                    <div class="tab-pane" id="changepw">
                         <form id="changePasswordForm">
                             <div class="form-group">
                                 <label><i class="fas fa-envelope"></i> Email</label>
@@ -165,7 +152,7 @@
                                 <label><i class="fas fa-check-circle"></i> Konfirmasi Password Baru</label>
                                 <input type="password" class="form-control" id="confirmPassword" placeholder="Ulangi password baru" required>
                             </div>
-                            <button type="submit" class="btn-primary" id="changePwBtn">
+                            <button type="submit" class="btn-login" id="changePwBtn">
                                 <i class="fas fa-save"></i> Ganti Password
                             </button>
                         </form>
@@ -173,10 +160,9 @@
                 </div>
                 
                 <div class="demo-info">
-                    <p><i class="fas fa-info-circle"></i> <strong>Akun Demo:</strong></p>
+                    <p><i class="fas fa-info-circle"></i> <strong>Akun Demo (isi di spreadsheet):</strong></p>
                     <p>📧 admin@suzuki.co.id | 🔑 admin123</p>
                     <p>📧 supervisor@suzuki.co.id | 🔑 super123</p>
-                    <p>📧 operator@suzuki.co.id | 🔑 op123</p>
                 </div>
             </div>
         </div>
@@ -185,7 +171,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="config.js"></script>
     <script>
-        // Fungsi show alert
         function showAlert(message, type = 'danger') {
             const alertDiv = document.getElementById('alertMessage');
             alertDiv.textContent = message;
@@ -194,7 +179,6 @@
             setTimeout(() => alertDiv.style.display = 'none', 4000);
         }
         
-        // Fungsi set loading
         function setLoading(isLoading, btnId) {
             const btn = document.getElementById(btnId);
             if (isLoading) {
@@ -203,6 +187,25 @@
             } else {
                 btn.innerHTML = btnId === 'loginBtn' ? '<i class="fas fa-sign-in-alt"></i> Login' : '<i class="fas fa-save"></i> Ganti Password';
                 btn.disabled = false;
+            }
+        }
+        
+        // TEST KONEKSI API DULU
+        async function testAPI() {
+            try {
+                console.log('Testing API connection...');
+                const response = await fetch(ENDPOINTS.users);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('API connected! Data users:', data);
+                    return true;
+                } else {
+                    console.log('API response not OK:', response.status);
+                    return false;
+                }
+            } catch (error) {
+                console.error('API connection failed:', error);
+                return false;
             }
         }
         
@@ -221,8 +224,22 @@
             setLoading(true, 'loginBtn');
             
             try {
+                console.log('Fetching users from:', ENDPOINTS.users);
                 const response = await fetch(ENDPOINTS.users);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const users = await response.json();
+                console.log('Users loaded:', users);
+                
+                if (!users || users.length === 0) {
+                    showAlert('Database users kosong! Silakan isi spreadsheet terlebih dahulu.', 'warning');
+                    setLoading(false, 'loginBtn');
+                    return;
+                }
+                
                 const user = users.find(u => u.email === email && u.password === password);
                 
                 setLoading(false, 'loginBtn');
@@ -238,12 +255,13 @@
                     showAlert('Login berhasil! Mengarahkan...', 'success');
                     setTimeout(() => window.location.href = 'dashboard.html', 1000);
                 } else {
-                    showAlert('Email atau password salah!', 'danger');
+                    showAlert('Email atau password salah! Periksa data di spreadsheet.', 'danger');
                     document.getElementById('password').value = '';
                 }
             } catch (error) {
                 setLoading(false, 'loginBtn');
-                showAlert('Gagal terhubung ke database. Periksa koneksi.', 'danger');
+                console.error('Login error:', error);
+                showAlert(`Gagal terhubung ke database: ${error.message}. Pastikan Google Apps Script sudah di-deploy dan sheet "users" ada.`, 'danger');
             }
         });
         
@@ -291,7 +309,6 @@
                 if (result.success) {
                     showAlert('✅ Password berhasil diubah! Silakan login dengan password baru.', 'success');
                     document.getElementById('changePasswordForm').reset();
-                    // Switch ke tab login
                     document.getElementById('login-tab').click();
                 } else {
                     showAlert(result.message || 'Gagal mengubah password', 'danger');
@@ -302,10 +319,20 @@
             }
         });
         
-        // Cek session
+        // Cek session sebelumnya
         if (localStorage.getItem('isLoggedIn') === 'true') {
             window.location.href = 'dashboard.html';
         }
+        
+        // Test API saat halaman load
+        testAPI().then(connected => {
+            if (connected) {
+                console.log('✅ API connected successfully');
+            } else {
+                console.log('❌ API not connected, check spreadsheet and Apps Script deployment');
+                showAlert('⚠️ Gagal konek ke database. Periksa URL Google Apps Script dan pastikan sheet "users" sudah dibuat.', 'warning');
+            }
+        });
     </script>
 </body>
 </html>
