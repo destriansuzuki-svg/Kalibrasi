@@ -2,7 +2,7 @@
 // Ganti dengan URL Google Apps Script Anda!
 
 // ========== KONFIGURASI API ==========
-const API_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxx/exec'; // Ganti dengan URL Anda!
+const API_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvUbjkwtxtN8FGIXXiI98lMknvqudsphyiXzBNqtDFeUsE0cxj6hrxxmD8L4Cg0mJ9gA/exec'; // Ganti dengan URL Anda!
 
 // ========== ENDPOINTS ==========
 const ENDPOINTS = {
