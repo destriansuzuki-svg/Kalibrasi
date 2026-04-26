@@ -7,105 +7,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             padding: 20px;
         }
-        
         .login-container {
-            width: 100%;
-            max-width: 450px;
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 5vh;
         }
-        
-        .login-card {
+        .card {
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
-            animation: fadeInUp 0.6s ease;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .login-header {
+        .card-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 40px 30px;
             text-align: center;
             color: white;
         }
-        
-        .login-header i {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-        
-        .login-header h3 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .login-header p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin: 0;
-        }
-        
-        .login-body {
-            padding: 40px 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .form-group label i {
-            margin-right: 8px;
-            color: #667eea;
-        }
-        
+        .card-header i { font-size: 60px; margin-bottom: 15px; }
+        .card-header h3 { font-size: 24px; margin-bottom: 5px; }
+        .card-body { padding: 40px 30px; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; display: block; }
+        .form-group label i { margin-right: 8px; color: #667eea; }
         .form-control {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #e1e5e9;
             border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s;
         }
-        
         .form-control:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-        
-        .btn-login {
+        .btn-primary {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -113,65 +55,18 @@
             border-radius: 10px;
             color: white;
             font-weight: 600;
-            font-size: 16px;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
         }
-        
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
         }
-        
-        .btn-login:active {
-            transform: translateY(0);
-        }
-        
-        .btn-login i {
-            margin-right: 8px;
-        }
-        
-        .alert-message {
-            display: none;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .alert-danger {
-            background-color: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-        }
-        
-        .alert-success {
-            background-color: #dcfce7;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
-        }
-        
-        .demo-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 13px;
-            text-align: center;
-        }
-        
-        .demo-info p {
-            margin: 5px 0;
-            color: #666;
-        }
-        
-        .demo-info code {
-            background: #e9ecef;
-            padding: 2px 6px;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-        
+        .btn-outline:hover { background: #667eea; color: white; }
+        .alert-message { display: none; padding: 12px; border-radius: 10px; margin-bottom: 20px; }
+        .alert-danger { background: #fee2e2; color: #dc2626; }
+        .alert-success { background: #dcfce7; color: #16a34a; }
         .loading {
             display: inline-block;
             width: 16px;
@@ -182,217 +77,235 @@
             animation: spin 0.6s linear infinite;
             margin-right: 8px;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .nav-tabs { margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; }
+        .nav-tabs .nav-link {
+            border: none;
+            font-weight: 600;
+            color: #64748b;
+            padding: 12px 20px;
         }
-        
-        @media (max-width: 480px) {
-            .login-header {
-                padding: 30px 20px;
-            }
-            .login-body {
-                padding: 30px 20px;
-            }
+        .nav-tabs .nav-link.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            background: transparent;
+        }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .demo-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 13px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
+        <div class="card">
+            <div class="card-header">
                 <i class="fas fa-tools"></i>
                 <h3>Monitoring Kalibrasi</h3>
-                <p>Section Painting 2W</p>
-                <small>PT Suzuki Indomobil Motor</small>
+                <p>Section Painting 2W - PT Suzuki Indomobil Motor</p>
             </div>
             
-            <div class="login-body">
+            <div class="card-body">
                 <div id="alertMessage" class="alert-message"></div>
                 
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label>
-                            <i class="fas fa-envelope"></i> Email
-                        </label>
-                        <input type="email" class="form-control" id="email" 
-                               placeholder="Masukkan email Anda" required autocomplete="off">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="changepw-tab" data-bs-toggle="tab" data-bs-target="#changepw" type="button" role="tab">
+                            <i class="fas fa-key"></i> Ganti Password
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content mt-4">
+                    <!-- Tab Login -->
+                    <div class="tab-pane active" id="login" role="tabpanel">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Masukkan email" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-lock"></i> Password</label>
+                                <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                            </div>
+                            <button type="submit" class="btn-primary" id="loginBtn">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
                     </div>
                     
-                    <div class="form-group">
-                        <label>
-                            <i class="fas fa-lock"></i> Password
-                        </label>
-                        <input type="password" class="form-control" id="password" 
-                               placeholder="Masukkan password" required>
+                    <!-- Tab Ganti Password -->
+                    <div class="tab-pane" id="changepw" role="tabpanel">
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" class="form-control" id="cpEmail" placeholder="Email Anda" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-lock"></i> Password Lama</label>
+                                <input type="password" class="form-control" id="oldPassword" placeholder="Password saat ini" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-key"></i> Password Baru</label>
+                                <input type="password" class="form-control" id="newPassword" placeholder="Minimal 6 karakter" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-check-circle"></i> Konfirmasi Password Baru</label>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Ulangi password baru" required>
+                            </div>
+                            <button type="submit" class="btn-primary" id="changePwBtn">
+                                <i class="fas fa-save"></i> Ganti Password
+                            </button>
+                        </form>
                     </div>
-                    
-                    <button type="submit" class="btn-login" id="loginBtn">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </button>
-                </form>
+                </div>
                 
                 <div class="demo-info">
-                    <p><i class="fas fa-info-circle"></i> <strong>Demo Account:</strong></p>
+                    <p><i class="fas fa-info-circle"></i> <strong>Akun Demo:</strong></p>
                     <p>📧 admin@suzuki.co.id | 🔑 admin123</p>
                     <p>📧 supervisor@suzuki.co.id | 🔑 super123</p>
                     <p>📧 operator@suzuki.co.id | 🔑 op123</p>
-                    <hr>
-                    <p class="text-muted small mb-0">
-                        <i class="fas fa-shield-alt"></i> Sistem terintegrasi dengan Google Spreadsheet
-                    </p>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="config.js"></script>
     <script>
-        // ========== LOGIN SYSTEM ==========
-        
-        // Konfigurasi - Ganti dengan URL Google Spreadsheet Anda
-        // Jika belum punya, gunakan mock data di bawah
-        const USE_MOCK_DATA = true; // Set false jika sudah pakai Google Spreadsheet
-        
-        // Mock data untuk testing (HAPUS jika sudah pakai API)
-        const MOCK_USERS = [
-            { email: 'admin@suzuki.co.id', password: 'admin123', role: 'admin', nama_lengkap: 'Administrator', departemen: 'Quality Control' },
-            { email: 'supervisor@suzuki.co.id', password: 'super123', role: 'supervisor', nama_lengkap: 'Siti Rahayu', departemen: 'Painting' },
-            { email: 'operator@suzuki.co.id', password: 'op123', role: 'operator', nama_lengkap: 'Budi Santoso', departemen: 'Painting' },
-            { email: 'manager@suzuki.co.id', password: 'manager123', role: 'manager', nama_lengkap: 'Agus Wijaya', departemen: 'Production' }
-        ];
-        
-        // Fungsi validasi login
-        async function validateUser(email, password) {
-            if (USE_MOCK_DATA) {
-                // Mode mock (untuk testing tanpa Google Spreadsheet)
-                console.log('🔧 Using MOCK DATA for login testing');
-                return MOCK_USERS.find(u => u.email === email && u.password === password) || null;
-            }
-            
-            // Mode real - ambil dari Google Spreadsheet
-            try {
-                const response = await fetch(ENDPOINTS.users);
-                if (!response.ok) throw new Error('Gagal mengambil data user');
-                const users = await response.json();
-                return users.find(u => u.email === email && u.password === password) || null;
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                showAlert('Gagal terhubung ke database. Gunakan mode demo.', 'danger');
-                return null;
-            }
-        }
-        
-        // Fungsi menampilkan alert
+        // Fungsi show alert
         function showAlert(message, type = 'danger') {
             const alertDiv = document.getElementById('alertMessage');
             alertDiv.textContent = message;
             alertDiv.className = `alert-message alert-${type}`;
             alertDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                alertDiv.style.display = 'none';
-            }, 4000);
+            setTimeout(() => alertDiv.style.display = 'none', 4000);
         }
         
-        // Fungsi show loading state
-        function setLoading(isLoading) {
-            const btn = document.getElementById('loginBtn');
+        // Fungsi set loading
+        function setLoading(isLoading, btnId) {
+            const btn = document.getElementById(btnId);
             if (isLoading) {
                 btn.innerHTML = '<span class="loading"></span> Memproses...';
                 btn.disabled = true;
             } else {
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                btn.innerHTML = btnId === 'loginBtn' ? '<i class="fas fa-sign-in-alt"></i> Login' : '<i class="fas fa-save"></i> Ganti Password';
                 btn.disabled = false;
             }
         }
         
-        // Fungsi redirect setelah login sukses
-        function redirectToDashboard(user) {
-            // Simpan data user ke localStorage
-            const userData = {
-                email: user.email,
-                role: user.role,
-                nama: user.nama_lengkap,
-                departemen: user.departemen || 'Painting',
-                loginTime: new Date().toISOString()
-            };
-            localStorage.setItem('user', JSON.stringify(userData));
-            localStorage.setItem('isLoggedIn', 'true');
-            
-            // Catat log login
-            console.log('✅ Login berhasil:', userData);
-            
-            // Tampilkan alert sukses
-            showAlert('Login berhasil! Mengarahkan ke dashboard...', 'success');
-            
-            // Redirect setelah delay
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
-        }
-        
-        // Event listener form login
+        // ========== LOGIN ==========
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             
-            // Validasi field kosong
             if (!email || !password) {
-                showAlert('❌ Email dan password harus diisi!', 'danger');
+                showAlert('Email dan password harus diisi!', 'danger');
                 return;
             }
             
-            // Validasi format email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showAlert('❌ Format email tidak valid!', 'danger');
-                return;
-            }
+            setLoading(true, 'loginBtn');
             
-            setLoading(true);
-            
-            // Proses validasi
-            const user = await validateUser(email, password);
-            
-            setLoading(false);
-            
-            if (user) {
-                redirectToDashboard(user);
-            } else {
-                showAlert('❌ Email atau password salah! Silakan coba lagi.', 'danger');
-                // Clear password field
-                document.getElementById('password').value = '';
+            try {
+                const response = await fetch(ENDPOINTS.users);
+                const users = await response.json();
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                setLoading(false, 'loginBtn');
+                
+                if (user) {
+                    localStorage.setItem('user', JSON.stringify({
+                        email: user.email,
+                        role: user.role,
+                        nama: user.nama_lengkap,
+                        departemen: user.departemen
+                    }));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    showAlert('Login berhasil! Mengarahkan...', 'success');
+                    setTimeout(() => window.location.href = 'dashboard.html', 1000);
+                } else {
+                    showAlert('Email atau password salah!', 'danger');
+                    document.getElementById('password').value = '';
+                }
+            } catch (error) {
+                setLoading(false, 'loginBtn');
+                showAlert('Gagal terhubung ke database. Periksa koneksi.', 'danger');
             }
         });
         
-        // Fungsi untuk cek session (jika sudah login sebelumnya)
-        function checkExistingSession() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const user = localStorage.getItem('user');
+        // ========== GANTI PASSWORD ==========
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            if (isLoggedIn === 'true' && user) {
-                // Auto redirect ke dashboard jika sudah login
-                window.location.href = 'dashboard.html';
+            const email = document.getElementById('cpEmail').value.trim();
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!email || !oldPassword || !newPassword || !confirmPassword) {
+                showAlert('Semua field harus diisi!', 'danger');
+                return;
             }
+            
+            if (newPassword.length < 6) {
+                showAlert('Password baru minimal 6 karakter!', 'danger');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showAlert('Password baru tidak cocok!', 'danger');
+                return;
+            }
+            
+            setLoading(true, 'changePwBtn');
+            
+            try {
+                const response = await fetch(ENDPOINTS.update, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'updatePassword',
+                        email: email,
+                        oldPassword: oldPassword,
+                        newPassword: newPassword
+                    })
+                });
+                
+                const result = await response.json();
+                setLoading(false, 'changePwBtn');
+                
+                if (result.success) {
+                    showAlert('✅ Password berhasil diubah! Silakan login dengan password baru.', 'success');
+                    document.getElementById('changePasswordForm').reset();
+                    // Switch ke tab login
+                    document.getElementById('login-tab').click();
+                } else {
+                    showAlert(result.message || 'Gagal mengubah password', 'danger');
+                }
+            } catch (error) {
+                setLoading(false, 'changePwBtn');
+                showAlert('Gagal terhubung ke server', 'danger');
+            }
+        });
+        
+        // Cek session
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            window.location.href = 'dashboard.html';
         }
-        
-        // Cek session saat halaman dimuat
-        checkExistingSession();
-        
-        // Tambahkan event untuk enter key
-        document.getElementById('password').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
-            }
-        });
-        
-        // Console log untuk debugging
-        console.log('🚀 Halaman login siap digunakan');
-        console.log('📌 Mode:', USE_MOCK_DATA ? 'MOCK DATA (Testing)' : 'REAL API');
-        console.log('📌 Akun demo: admin@suzuki.co.id / admin123');
     </script>
 </body>
 </html>
