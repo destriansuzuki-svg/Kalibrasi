@@ -1,347 +1,109 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Login - Kalibrasi System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .login-container {
-      display: flex;
-      max-width: 1000px;
-      width: 100%;
-      background: white;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-
-    /* Left Panel - Branding */
-    .login-brand {
-      flex: 1;
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      padding: 48px;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 40px;
-    }
-
-    .logo-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .logo-icon i {
-      font-size: 24px;
-    }
-
-    .logo-text h1 {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .logo-text p {
-      font-size: 12px;
-      opacity: 0.8;
-      margin-top: 4px;
-    }
-
-    .brand-quote h2 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      line-height: 1.3;
-    }
-
-    .brand-quote p {
-      font-size: 14px;
-      opacity: 0.85;
-      line-height: 1.6;
-    }
-
-    .brand-footer {
-      font-size: 12px;
-      opacity: 0.7;
-      margin-top: 40px;
-    }
-
-    /* Right Panel - Login Form */
-    .login-form {
-      flex: 1;
-      padding: 48px;
-      background: white;
-    }
-
-    .form-header {
-      margin-bottom: 32px;
-    }
-
-    .form-header h3 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 8px;
-    }
-
-    .form-header p {
-      font-size: 14px;
-      color: #64748b;
-    }
-
-    .input-group {
-      margin-bottom: 20px;
-    }
-
-    .input-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      color: #334155;
-      margin-bottom: 6px;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-wrapper i {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 16px;
-    }
-
-    .input-wrapper input {
-      width: 100%;
-      padding: 12px 12px 12px 42px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.2s;
-    }
-
-    .input-wrapper input:focus {
-      outline: none;
-      border-color: #4f46e5;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 8px;
-    }
-
-    .login-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-    }
-
-    .error-message {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 10px;
-      padding: 12px;
-      margin-top: 16px;
-      font-size: 13px;
-      color: #dc2626;
-      display: none;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .error-message.show {
-      display: flex;
-    }
-
-    .demo-cred {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid #e2e8f0;
-      font-size: 12px;
-      color: #64748b;
-      text-align: center;
-    }
-
-    .demo-cred code {
-      background: #f1f5f9;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-family: monospace;
-      font-size: 11px;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .login-container {
-        flex-direction: column;
-        max-width: 400px;
-      }
-      .login-brand {
-        padding: 32px;
-        text-align: center;
-      }
-      .brand-quote h2 {
-        font-size: 22px;
-      }
-      .login-form {
-        padding: 32px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Monitoring Kalibrasi Painting 2W</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo i {
+            font-size: 60px;
+            color: #667eea;
+        }
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-weight: bold;
+        }
+        .alert {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="login-container">
-    <!-- Left Panel - Branding -->
-    <div class="login-brand">
-      <div class="logo">
-        <div class="logo-icon">
-          <i class="fas fa-microscope"></i>
+    <div class="login-card">
+        <div class="logo">
+            <i class="fas fa-tools"></i>
+            <h3>Monitoring Kalibrasi</h3>
+            <p class="text-muted">Section Painting 2W</p>
+            <small>PT Suzuki Indomobil Motor</small>
         </div>
-        <div class="logo-text">
-          <h1>Kalibrasi System</h1>
-          <p>PT Suzuki Indomobil Motor</p>
+        
+        <div class="alert alert-danger" id="alertMessage"></div>
+        
+        <form id="loginForm">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-login">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </button>
+        </form>
+        
+        <div class="mt-3 text-center text-muted small">
+            Demo: admin@suzuki.co.id / admin123
         </div>
-      </div>
-      <div class="brand-quote">
-        <h2>Painting 2W<br>Kalibrasi Management</h2>
-        <p>Sistem manajemen kalibrasi alat untuk section Painting 2W. Pantau jadwal, status, dan notifikasi kalibrasi dalam satu platform terintegrasi.</p>
-      </div>
-      <div class="brand-footer">
-        <i class="fas fa-shield-alt"></i> Secure Access • Internal Only
-      </div>
     </div>
 
-    <!-- Right Panel - Login Form -->
-    <div class="login-form">
-      <div class="form-header">
-        <h3>Selamat Datang</h3>
-        <p>Silakan login untuk melanjutkan</p>
-      </div>
-
-      <form id="loginForm">
-        <div class="input-group">
-          <label>Username</label>
-          <div class="input-wrapper">
-            <i class="fas fa-user"></i>
-            <input type="text" id="username" placeholder="Masukkan username" autocomplete="off" required>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>Password</label>
-          <div class="input-wrapper">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="password" placeholder="Masukkan password" required>
-          </div>
-        </div>
-
-        <button type="submit" class="login-btn">
-          <i class="fas fa-sign-in-alt"></i> Login
-        </button>
-
-        <div class="error-message" id="errorMsg">
-          <i class="fas fa-exclamation-circle"></i>
-          <span>Username atau password salah!</span>
-        </div>
-
-        <div class="demo-cred">
-          <i class="fas fa-info-circle"></i> Demo akses:<br>
-          Username: <code>admin</code> | Password: <code>admin123</code><br>
-          Username: <code>suzuki</code> | Password: <code>painting2025</code>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value;
-      const errorDiv = document.getElementById('errorMsg');
-      
-      // Konfigurasi kredensial (bisa ditambah sesuai kebutuhan)
-      const validCredentials = [
-        { user: 'admin', pass: 'admin123' },
-        { user: 'suzuki', pass: 'painting2025' },
-        { user: 'operator', pass: 'kalibrasi2025' },
-        { user: 'supervisor', pass: 'spv123' }
-      ];
-      
-      const isValid = validCredentials.some(cred => 
-        cred.user === username && cred.pass === password
-      );
-      
-      if (isValid) {
-        // Simpan session
-        sessionStorage.setItem('auth', '1');
-        sessionStorage.setItem('user', username);
-        sessionStorage.setItem('loginTime', new Date().toISOString());
+    <script>
+        const API_URL = 'YOUR_GOOGLE_SHEETS_API_URL'; // Ganti dengan API URL Anda
         
-        // Redirect ke dashboard
-        window.location.href = 'dashboard.html';
-      } else {
-        // Tampilkan error
-        errorDiv.classList.add('show');
-        
-        // Clear password field
-        document.getElementById('password').value = '';
-        
-        // Auto hide error setelah 3 detik
-        setTimeout(() => {
-          errorDiv.classList.remove('show');
-        }, 3000);
-      }
-    });
-    
-    // Cek jika sudah login, redirect ke dashboard
-    if (sessionStorage.getItem('auth') === '1') {
-      window.location.href = 'dashboard.html';
-    }
-  </script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Fetch users dari Google Spreadsheet
+            const response = await fetch(`${API_URL}?sheet=users`);
+            const users = await response.json();
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Simpan session
+                localStorage.setItem('user', JSON.stringify({
+                    email: user.email,
+                    role: user.role,
+                    nama: user.nama_lengkap
+                }));
+                
+                // Redirect ke dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                const alertDiv = document.getElementById('alertMessage');
+                alertDiv.textContent = 'Email atau password salah!';
+                alertDiv.style.display = 'block';
+                setTimeout(() => alertDiv.style.display = 'none', 3000);
+            }
+        });
+    </script>
 </body>
 </html>
