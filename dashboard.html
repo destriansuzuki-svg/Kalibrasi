@@ -2,246 +2,661 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Monitoring Kalibrasi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Dashboard - Monitoring Kalibrasi Painting 2W</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            overflow-x: hidden;
+        }
+
+        /* ========== MOBILE FIRST ========== */
+        /* Sidebar - Mobile */
         .sidebar {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            transition: left 0.3s ease;
+            z-index: 1050;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
-        .sidebar a {
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header i {
+            font-size: 50px;
+            color: #667eea;
+        }
+
+        .sidebar-header h5 {
             color: white;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .sidebar-header p {
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #cbd5e1;
             text-decoration: none;
-            padding: 12px 20px;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: white;
+            padding-left: 28px;
+        }
+
+        .sidebar-menu a i {
+            width: 24px;
+            font-size: 18px;
+        }
+
+        /* Overlay untuk mobile */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
             display: block;
-            transition: 0.3s;
         }
-        .sidebar a:hover {
-            background: rgba(255,255,255,0.1);
-            padding-left: 30px;
+
+        /* Main Content */
+        .main-content {
+            min-height: 100vh;
+            padding: 15px;
+            padding-bottom: 70px;
         }
-        .sidebar a.active {
-            background: rgba(255,255,255,0.2);
-            border-left: 4px solid white;
-        }
-        .card-stats {
+
+        /* Navbar Mobile */
+        .navbar-mobile {
+            background: white;
             border-radius: 15px;
-            transition: transform 0.3s;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #667eea;
             cursor: pointer;
         }
-        .card-stats:hover {
-            transform: translateY(-5px);
+
+        .user-info-mobile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .badge-expired {
-            animation: blink 1s infinite;
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
         }
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
         }
-        .notification-toast {
+
+        .user-role {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* Stat Cards - Grid Mobile */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:active {
+            transform: scale(0.98);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* Chart Cards */
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Alert Items */
+        .alert-item {
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .alert-item.warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .alert-item.danger {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+
+        .alert-item .alert-icon {
+            font-size: 20px;
+        }
+
+        .alert-item .alert-content {
+            flex: 1;
+        }
+
+        .alert-item .alert-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .alert-item .alert-detail {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Table Responsive */
+        .table-responsive-custom {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-custom {
+            width: 100%;
+            font-size: 13px;
+        }
+
+        .table-custom th, .table-custom td {
+            padding: 10px 8px;
+            white-space: nowrap;
+        }
+
+        /* Update Time */
+        .update-time {
+            font-size: 11px;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Floating Refresh Button */
+        .fab-refresh {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
-            z-index: 9999;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+
+        .fab-refresh:active {
+            transform: scale(0.95);
+        }
+
+        /* Toast Notification */
+        .toast-notification {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            left: 10px;
+            z-index: 1100;
+            max-width: 350px;
+            margin-left: auto;
+        }
+
+        /* Pull to Refresh Indicator */
+        .ptr-element {
+            text-align: center;
+            padding: 10px;
+            color: #667eea;
+            font-size: 12px;
+        }
+
+        /* Badge */
+        .badge-custom {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Loading */
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 768px) {
+            .sidebar {
+                left: 0;
+                width: 260px;
+                position: fixed;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .sidebar-overlay {
+                display: none !important;
+            }
+            
+            .main-content {
+                margin-left: 260px;
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+            
+            .stat-value {
+                font-size: 32px;
+            }
+            
+            .toast-notification {
+                right: 20px;
+                left: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .stat-value {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="notification-toast" id="toastContainer"></div>
+    <!-- Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 p-0 sidebar">
-                <div class="text-center py-4">
-                    <i class="fas fa-tools fa-3x text-white"></i>
-                    <h5 class="text-white mt-2">Kalibrasi 2W</h5>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-tools"></i>
+            <h5>Kalibrasi 2W</h5>
+            <p>PT Suzuki Indomobil Motor</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="alat.html">
+                <i class="fas fa-microscope"></i>
+                <span>Data Alat</span>
+            </a>
+            <a href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Mobile Navbar -->
+        <div class="navbar-mobile">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="user-info-mobile">
+                <div class="user-details text-end">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-role" id="userRole"></div>
                 </div>
-                <a href="dashboard.html" class="active">
-                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                </a>
-                <a href="alat.html">
-                    <i class="fas fa-microscope me-2"></i> Data Alat
-                </a>
-                <a href="#" onclick="logout()">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                </a>
+                <div class="user-avatar" id="userAvatar">A</div>
             </div>
-            
-            <!-- Main Content -->
-            <div class="col-md-10 p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>
-                        <i class="fas fa-chart-line me-2"></i>Dashboard Monitoring
-                        <small class="text-muted" id="userName"></small>
-                    </h2>
-                    <div>
-                        <button class="btn btn-info" onclick="checkExpiredNow()">
-                            <i class="fas fa-bell"></i> Cek Notifikasi
-                        </button>
-                    </div>
+        </div>
+        
+        <!-- Toast Container -->
+        <div class="toast-notification" id="toastContainer"></div>
+        
+        <!-- Pull to Refresh (Desktop: hidden, Mobile: visible on drag) -->
+        <div class="ptr-element" id="ptrElement" style="display: none;">
+            <i class="fas fa-sync-alt fa-spin"></i> Memperbarui...
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                    <i class="fas fa-microscope"></i>
                 </div>
-                
-                <!-- Statistics Cards -->
-                <div class="row mb-4" id="statsCards">
-                    <div class="col-md-3">
-                        <div class="card card-stats bg-primary text-white">
-                            <div class="card-body">
-                                <i class="fas fa-microscope fa-2x float-end"></i>
-                                <h3 id="totalAlat">0</h3>
-                                <p>Total Alat</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card card-stats bg-success text-white">
-                            <div class="card-body">
-                                <i class="fas fa-check-circle fa-2x float-end"></i>
-                                <h3 id="validAlat">0</h3>
-                                <p>Valid</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card card-stats bg-warning text-white">
-                            <div class="card-body">
-                                <i class="fas fa-hourglass-half fa-2x float-end"></i>
-                                <h3 id="warningAlat">0</h3>
-                                <p>Akan Expired (≤7 hari)</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card card-stats bg-danger text-white">
-                            <div class="card-body">
-                                <i class="fas fa-times-circle fa-2x float-end"></i>
-                                <h3 id="expiredAlat">0</h3>
-                                <p>Expired</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="stat-value" id="totalAlat">0</div>
+                <div class="stat-label">Total Alat</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-success bg-opacity-10 text-success">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-                
-                <!-- Charts -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5>Status Kalibrasi</h5>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="statusChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5>Alat Akan Expired</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="expiringList" style="max-height: 300px; overflow-y: auto;"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="stat-value" id="validAlat">0</div>
+                <div class="stat-label">Valid</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
                 </div>
-                
-                <!-- Recent Activity -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Alat yang Perlu Segera Dikalibrasi</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table" id="urgentTable">
-                            <thead>
-                                <tr><th>Kode Alat</th><th>Nama Alat</th><th>Lokasi</th><th>Due Date</th><th>Sisa Hari</th><th>Aksi</th></tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+                <div class="stat-value" id="warningAlat">0</div>
+                <div class="stat-label">Akan Expired (≤7 hari)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-value" id="expiredAlat">0</div>
+                <div class="stat-label">Expired</div>
+            </div>
+        </div>
+        
+        <!-- Chart Row -->
+        <div class="chart-card">
+            <div class="chart-title">
+                <span><i class="fas fa-chart-pie me-2"></i> Status Kalibrasi</span>
+                <span class="update-badge" id="lastUpdate" style="font-size: 10px; color: #94a3b8;"></span>
+            </div>
+            <canvas id="statusChart" style="width: 100%; max-height: 250px;"></canvas>
+        </div>
+        
+        <!-- Peringatan -->
+        <div class="chart-card">
+            <div class="chart-title">
+                <span><i class="fas fa-bell me-2"></i> Peringatan Kalibrasi</span>
+                <button class="btn btn-sm btn-outline-primary" onclick="manualCheck()" style="font-size: 11px; padding: 4px 10px;">
+                    <i class="fas fa-sync-alt"></i> Cek
+                </button>
+            </div>
+            <div id="expiringListContainer">
+                <div class="loading-spinner" id="expiringLoading">
+                    <i class="fas fa-spinner fa-spin"></i> Memuat...
                 </div>
             </div>
         </div>
+        
+        <!-- Daftar Alat yang Perlu Segera Dikalibrasi -->
+        <div class="chart-card">
+            <div class="chart-title">
+                <span><i class="fas fa-clock me-2"></i> Alat Perlu Kalibrasi Segera</span>
+            </div>
+            <div class="table-responsive-custom">
+                <table class="table-custom" id="urgentTable">
+                    <thead>
+                        <tr>
+                            <th>Kode</th>
+                            <th>Nama Alat</th>
+                            <th>Lokasi</th>
+                            <th>Due Date</th>
+                            <th>Sisa Hari</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="urgentTableBody">
+                        <tr><td colspan="6" class="text-center">Memuat...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="update-time" id="updateTimeText">
+            Terakhir diperbarui: --:--
+        </div>
     </div>
+    
+    <!-- Floating Refresh Button -->
+    <button class="fab-refresh" id="fabRefresh" onclick="forceRefresh()">
+        <i class="fas fa-sync-alt"></i>
+    </button>
 
+    <script src="config.js"></script>
     <script>
-        const API_URL = 'YOUR_GOOGLE_SHEETS_API_URL';
+        // ========== GLOBAL VARIABLES ==========
         let statusChart = null;
+        let refreshInterval = null;
+        let currentUser = null;
+        let alatDataCache = [];
         
-        // Cek autentikasi
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) window.location.href = 'index.html';
-        document.getElementById('userName').textContent = ` - ${user.nama} (${user.role})`;
+        // Mock Data (jika belum konek API, HAPUS jika sudah pakai API)
+        const USE_MOCK_DATA = false; // Set FALSE jika sudah pakai Google Spreadsheet
         
-        // Request izin notifikasi browser
-        if ('Notification' in window) {
-            Notification.requestPermission();
+        const MOCK_ALAT = [
+            { id: '1', kode_alat: 'TH-001', nama_alat: 'Thermometer Digital', lokasi_painting: 'Oven 1', due_date: '2026-05-15' },
+            { id: '2', kode_alat: 'HY-002', nama_alat: 'Hygrometer', lokasi_painting: 'Booth A', due_date: '2026-06-20' },
+            { id: '3', kode_alat: 'TG-003', nama_alat: 'Thickness Gauge', lokasi_painting: 'QC Meja', due_date: '2026-04-10' },
+            { id: '4', kode_alat: 'AP-004', nama_alat: 'Air Pressure Gauge', lokasi_painting: 'Spray Gun', due_date: '2026-03-28' },
+            { id: '5', kode_alat: 'GM-005', nama_alat: 'Gloss Meter', lokasi_painting: 'Inspeksi', due_date: '2026-02-14' }
+        ];
+        
+        // ========== AUTH CHECK ==========
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const user = localStorage.getItem('user');
+            
+            if (isLoggedIn !== 'true' || !user) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            
+            currentUser = JSON.parse(user);
+            return true;
         }
         
-        // Fungsi notifikasi browser
-        function showBrowserNotification(title, body, url) {
-            if (Notification.permission === 'granted') {
+        // ========== SETUP USER INFO ==========
+        function setupUserInfo() {
+            if (!currentUser) return;
+            document.getElementById('userName').textContent = currentUser.nama || currentUser.email.split('@')[0];
+            document.getElementById('userRole').textContent = currentUser.role || 'User';
+            const avatar = (currentUser.nama || currentUser.email).charAt(0).toUpperCase();
+            document.getElementById('userAvatar').textContent = avatar;
+        }
+        
+        // ========== NOTIFICATION ==========
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                Notification.requestPermission();
+            }
+        }
+        
+        function showNotification(title, body, tag = 'kalibrasi') {
+            if ('Notification' in window && Notification.permission === 'granted') {
                 const notification = new Notification(title, {
                     body: body,
                     icon: 'https://cdn-icons-png.flaticon.com/512/190/190477.png',
-                    requireInteraction: true
+                    tag: tag,
+                    vibrate: [200, 100, 200],
+                    silent: false
                 });
-                notification.onclick = () => window.open(url);
-            }
-        }
-        
-        // Fungsi kirim email via EmailJS (daftar dulu di emailjs.com)
-        async function sendEmailNotifications(alat) {
-            // EmailJS configuration
-            // Ganti dengan public key dan service ID Anda
-            emailjs.init('YOUR_PUBLIC_KEY');
-            
-            for (const item of alat) {
-                const templateParams = {
-                    to_email: 'supervisor@suzuki.co.id',
-                    to_name: 'Supervisor Painting',
-                    alat_nama: item.nama_alat,
-                    alat_kode: item.kode_alat,
-                    due_date: item.due_date,
-                    lokasi: item.lokasi_painting
-                };
                 
-                await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+                notification.onclick = () => {
+                    window.focus();
+                    notification.close();
+                };
             }
         }
         
-        // Hitung sisa hari
-        function daysUntil(dateStr) {
-            const due = new Date(dateStr);
-            const today = new Date();
-            const diffTime = due - today;
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        function showToast(message, type = 'warning') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'warning' ? '#fef3c7' : (type === 'danger' ? '#fee2e2' : '#dcfce7');
+            const textColor = type === 'warning' ? '#92400e' : (type === 'danger' ? '#991b1b' : '#166534');
+            const icon = type === 'warning' ? 'fa-exclamation-triangle' : (type === 'danger' ? 'fa-times-circle' : 'fa-check-circle');
+            
+            toast.style.cssText = `background: ${bgColor}; color: ${textColor}; border-radius: 12px; padding: 12px 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); animation: slideIn 0.3s ease;`;
+            toast.innerHTML = `<i class="fas ${icon}"></i><span style="flex:1; font-size:13px;">${message}</span><i class="fas fa-times" style="cursor:pointer;" onclick="this.parentElement.remove()"></i>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.remove(), 5000);
         }
         
-        // Load dashboard data
+        // ========== FETCH DATA ==========
+        async function fetchAlatData() {
+            if (USE_MOCK_DATA) {
+                return [...MOCK_ALAT];
+            }
+            
+            try {
+                const response = await fetch(ENDPOINTS.alat);
+                if (!response.ok) throw new Error('Gagal fetch data');
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching alat:', error);
+                showToast('Gagal mengambil data dari server', 'danger');
+                return [];
+            }
+        }
+        
+        // ========== LOAD DASHBOARD ==========
         async function loadDashboard() {
-            const response = await fetch(`${API_URL}?sheet=alat_kalibrasi`);
-            const alatData = await response.json();
+            const alatData = await fetchAlatData();
+            alatDataCache = alatData;
+            
+            if (alatData.length === 0) {
+                document.getElementById('totalAlat').textContent = '0';
+                document.getElementById('validAlat').textContent = '0';
+                document.getElementById('warningAlat').textContent = '0';
+                document.getElementById('expiredAlat').textContent = '0';
+                return;
+            }
             
             let total = alatData.length;
             let expired = 0, warning = 0, valid = 0;
             let expiringList = [];
+            let urgentList = [];
             
             alatData.forEach(alat => {
                 const days = daysUntil(alat.due_date);
-                if (days < 0) expired++;
-                else if (days <= 7) {
+                if (days < 0) {
+                    expired++;
+                    urgentList.push({ ...alat, sisaHari: days, statusText: 'Expired' });
+                } else if (days <= WARNING_DAYS) {
                     warning++;
-                    expiringList.push(alat);
+                    expiringList.push({ ...alat, sisaHari: days });
+                    urgentList.push({ ...alat, sisaHari: days, statusText: 'Warning' });
+                } else {
+                    valid++;
                 }
-                else valid++;
             });
             
+            // Update stat cards
             document.getElementById('totalAlat').textContent = total;
             document.getElementById('validAlat').textContent = valid;
             document.getElementById('warningAlat').textContent = warning;
@@ -256,64 +671,162 @@
                     labels: ['Valid', 'Akan Expired (≤7 hari)', 'Expired'],
                     datasets: [{
                         data: [valid, warning, expired],
-                        backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
                     }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 11 } } }
+                    }
                 }
             });
             
             // Update expiring list
-            const expiringDiv = document.getElementById('expiringList');
-            expiringDiv.innerHTML = expiringList.map(alat => `
-                <div class="alert alert-warning">
-                    <strong>${alat.kode_alat} - ${alat.nama_alat}</strong><br>
-                    Due: ${alat.due_date} (${daysUntil(alat.due_date)} hari lagi)<br>
-                    Lokasi: ${alat.lokasi_painting}
-                </div>
-            `).join('');
+            const expiringContainer = document.getElementById('expiringListContainer');
+            if (expiringList.length === 0) {
+                expiringContainer.innerHTML = '<div class="text-center text-success py-3"><i class="fas fa-check-circle"></i> Semua alat dalam kondisi baik!</div>';
+            } else {
+                expiringContainer.innerHTML = expiringList.map(alat => `
+                    <div class="alert-item warning">
+                        <div class="alert-icon"><i class="fas fa-exclamation-triangle text-warning"></i></div>
+                        <div class="alert-content">
+                            <div class="alert-title">${alat.kode_alat} - ${alat.nama_alat}</div>
+                            <div class="alert-detail">Due: ${formatDate(alat.due_date)} (${alat.sisaHari} hari lagi) • Lokasi: ${alat.lokasi_painting}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
             
             // Update urgent table
-            const urgentTable = document.querySelector('#urgentTable tbody');
-            urgentTable.innerHTML = expiringList.map(alat => `
-                <tr>
-                    <td>${alat.kode_alat}</td>
-                    <td>${alat.nama_alat}</td>
-                    <td>${alat.lokasi_painting}</td>
-                    <td>${alat.due_date}</td>
-                    <td class="text-warning">${daysUntil(alat.due_date)} hari</td>
-                    <td><button class="btn btn-sm btn-primary" onclick="kalibrasi('${alat.id}')">Input Kalibrasi</button></td>
-                </tr>
-            `).join('');
+            const urgentTableBody = document.getElementById('urgentTableBody');
+            if (urgentList.length === 0) {
+                urgentTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-success">✅ Tidak ada alat yang perlu segera dikalibrasi</td></tr>';
+            } else {
+                urgentTableBody.innerHTML = urgentList.slice(0, 10).map(alat => `
+                    <tr>
+                        <td>${alat.kode_alat}</td>
+                        <td>${alat.nama_alat}</td>
+                        <td>${alat.lokasi_painting}</td>
+                        <td>${formatDate(alat.due_date)}</td>
+                        <td class="${alat.sisaHari < 0 ? 'text-danger' : 'text-warning'} fw-bold">${alat.sisaHari < 0 ? 'Expired' : alat.sisaHari + ' hari'}</td>
+                        <td><button class="btn btn-sm btn-primary" onclick="window.location.href='alat.html'" style="font-size: 11px; padding: 4px 8px;">Kalibrasi</button></td>
+                    </tr>
+                `).join('');
+            }
             
-            // Cek dan kirim notifikasi untuk yang akan expired
-            if (expiringList.length > 0) {
-                expiringList.forEach(alat => {
-                    showBrowserNotification(
-                        '⚠️ Peringatan Kalibrasi',
-                        `${alat.nama_alat} (${alat.kode_alat}) akan expired dalam ${daysUntil(alat.due_date)} hari`,
-                        'alat.html'
-                    );
-                });
+            // Update waktu
+            const now = new Date();
+            document.getElementById('updateTimeText').innerHTML = `Terakhir diperbarui: ${now.toLocaleTimeString('id-ID')}`;
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('id-ID');
+            
+            // Cek notifikasi untuk yang expired/warning
+            if (urgentList.length > 0 && document.visibilityState === 'visible') {
+                const expiredCount = urgentList.filter(u => u.sisaHari < 0).length;
+                const warningCount = urgentList.filter(u => u.sisaHari >= 0 && u.sisaHari <= WARNING_DAYS).length;
+                
+                if (expiredCount > 0) {
+                    showNotification('⚠️ Peringatan Kalibrasi', `${expiredCount} alat sudah EXPIRED! Segera lakukan kalibrasi.`);
+                    showToast(`${expiredCount} alat sudah EXPIRED!`, 'danger');
+                } else if (warningCount > 0) {
+                    showNotification('📢 Pengingat Kalibrasi', `${warningCount} alat akan expired dalam ${WARNING_DAYS} hari ke depan.`);
+                    showToast(`${warningCount} alat akan expired dalam ${WARNING_DAYS} hari`, 'warning');
+                }
             }
         }
         
-        function checkExpiredNow() {
-            loadDashboard();
-            showBrowserNotification('🔔 Pengecekan Selesai', 'Silakan cek daftar alat yang perlu dikalibrasi', 'dashboard.html');
+        // ========== MANUAL FUNCTIONS ==========
+        async function manualCheck() {
+            showToast('Memeriksa data terbaru...', 'info');
+            await loadDashboard();
+            showToast('Data berhasil diperbarui!', 'success');
         }
         
-        function kalibrasi(id) {
-            localStorage.setItem('kalibrasi_alat_id', id);
-            window.location.href = 'alat.html';
+        async function forceRefresh() {
+            const btn = document.getElementById('fabRefresh');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            await loadDashboard();
+            setTimeout(() => btn.innerHTML = '<i class="fas fa-sync-alt"></i>', 500);
+            showToast('Dashboard diperbarui!', 'success');
         }
         
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
+        // ========== SIDEBAR MOBILE ==========
+        function initSidebar() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+            });
+            
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            });
         }
         
-        // Load setiap 1 jam
-        loadDashboard();
-        setInterval(loadDashboard, 3600000);
+        // ========== PULL TO REFRESH (Mobile) ==========
+        function initPullToRefresh() {
+            let touchStartY = 0;
+            let isRefreshing = false;
+            
+            document.body.addEventListener('touchstart', (e) => {
+                if (window.scrollY === 0) {
+                    touchStartY = e.touches[0].clientY;
+                }
+            });
+            
+            document.body.addEventListener('touchmove', (e) => {
+                if (touchStartY > 0 && window.scrollY === 0 && !isRefreshing) {
+                    const diff = e.touches[0].clientY - touchStartY;
+                    if (diff > 60) {
+                        e.preventDefault();
+                        isRefreshing = true;
+                        const ptrElement = document.getElementById('ptrElement');
+                        ptrElement.style.display = 'block';
+                        forceRefresh().then(() => {
+                            setTimeout(() => {
+                                ptrElement.style.display = 'none';
+                                isRefreshing = false;
+                            }, 1000);
+                        });
+                        touchStartY = 0;
+                    }
+                }
+            });
+        }
+        
+        // ========== LOGOUT ==========
+        function setupLogout() {
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.clear();
+                window.location.href = 'index.html';
+            });
+        }
+        
+        // ========== INIT ==========
+        async function init() {
+            if (!checkAuth()) return;
+            setupUserInfo();
+            requestNotificationPermission();
+            initSidebar();
+            initPullToRefresh();
+            setupLogout();
+            
+            await loadDashboard();
+            
+            // Auto refresh setiap 60 detik
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(loadDashboard, 60000);
+        }
+        
+        // Start
+        init();
     </script>
 </body>
 </html>
